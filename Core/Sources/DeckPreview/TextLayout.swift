@@ -28,7 +28,9 @@ public enum TextLayout {
                 let marker: String
                 switch bullet {
                 case .character(let c): marker = c
-                case .number(_, let start): marker = "\(start + numberIndex(of: k, in: body.paragraphs))."
+                // Each numbered paragraph carries its own number (RTFReader reads it from
+                // the marker macOS wrote), so it is drawn as it is.
+                case .number(_, let number): marker = "\(number)."
                 }
                 let first = paragraph.runs.first?.style ?? paragraph.endStyle
                 result.append(NSAttributedString(string: marker + "\t", attributes: attributes(first, scale: scale, paragraph: style)))
@@ -147,14 +149,6 @@ public enum TextLayout {
     }
 
     // MARK: - Attributes
-
-    private static func numberIndex(of k: Int, in paragraphs: [Paragraph]) -> Int {
-        // How many numbered paragraphs come straight before this one.
-        var n = 0
-        var j = k - 1
-        while j >= 0, case .number = paragraphs[j].bullet { n += 1; j -= 1 }
-        return n
-    }
 
     public static func font(_ style: RunStyle, size: Double) -> NSFont {
         if let font = NSFont(name: style.fontName, size: size) { return font }

@@ -43,6 +43,7 @@ import ZipKit
             let data = try zip.contents(of: entry)
             let parser = XMLParser(data: data)
             #expect(parser.parse(), "\(entry.path) is not well-formed: \(String(describing: parser.parserError))")
+            #expect(OOXMLLint.problems(in: String(decoding: data, as: UTF8.self)) == [], "\(entry.path)")
         }
 
         let presentation = String(decoding: try zip.contents(of: zip.entry("ppt/presentation.xml")!), as: UTF8.self)
@@ -61,5 +62,33 @@ import ZipKit
         #expect(units.emu(1920) == 12_192_000)
         #expect(units.fontSize(42) == 2100)
         #expect(Units.angle(-90) == 270 * 60_000)
+    }
+
+    /// Text that reaches left of its margin (RTF's \\li-100, which ProPresenter writes)
+    /// and a list numbered from 2: margins stay at nought or more, the box's inset takes
+    /// the difference, and the list's paragraphs share their start.
+    @Test func textLeftOfItsMarginAndListsStayValid() throws {
+        let style = RunStyle(fontName: "Helvetica", fontFamily: "Helvetica", size: 60, fill: .solid(.white))
+        func p(_ text: String, left: Double, first: Double, bullet: Paragraph.Bullet? = nil) -> Paragraph {
+            Paragraph(leftIndent: left, firstLineIndent: first, bullet: bullet, tabStops: [1], runs: [Run(text: text, style: style)], endStyle: style)
+        }
+        let body = TextBody(paragraphs: [
+            p("Title", left: -5, first: 5),
+            p("one", left: 200, first: -200, bullet: .number(scheme: "arabicPeriod", startAt: 2)),
+            p("two", left: 200, first: -200, bullet: .number(scheme: "arabicPeriod", startAt: 3)),
+        ], insets: Insets(left: 5, top: 5, right: 5, bottom: 5))
+        let deck = Deck(size: Size(width: 1920, height: 1080), title: "Lists", slides: [Slide(items: [.shape(Shape(name: "Words", frame: Rect(x: 0, y: 0, width: 1000, height: 500), text: body))])])
+        let folder = try TestFiles.scratchFolder()
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let url = folder.appendingPathComponent("lists.pptx")
+        try PPTXWriter.write(deck, to: url, options: ConversionOptions(), notes: NoteCollector())
+        let zip = try ZipReader(url: url)
+        let slide = String(decoding: try zip.contents(of: zip.entry("ppt/slides/slide1.xml")!), as: UTF8.self)
+        #expect(OOXMLLint.problems(in: slide) == [])
+        #expect(slide.contains(#"lIns="0""#))                 // 5 - 5
+        #expect(slide.contains(#"marL="1301750""#))           // 200 + 5, in EMU
+        #expect(slide.contains(#"<a:tab pos="38100""#))       // 1 + 5
+        #expect(slide.components(separatedBy: #"startAt="2""#).count == 3)
+        #expect(!slide.contains(#"startAt="3""#))
     }
 }

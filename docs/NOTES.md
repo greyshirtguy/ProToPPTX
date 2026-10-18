@@ -67,7 +67,10 @@ four fonts, two sizes, four multiples, top and centred.
 - At a percentage near 100, the first baseline is a little lower than 0.9 × the size, by
   an amount that depends on the font (up to 9 pixels at 120 points in Helvetica Neue).
   NOT KNOWN why; left as it is.
-- An inset less than nought is honoured, and kept.
+- An inset less than nought is honoured, and kept; a paragraph's left margin (`marL`)
+  less than nought is not valid, and makes PowerPoint offer to repair the whole deck.
+  ProPresenter's text can reach left of its margin (RTF `\li-100`), so the writer moves
+  the box's inset instead (2026-10-19, found by the maintainer in one of his decks).
 - Its horizontal layout of the same words, in the same box, matches macOS's to the pixel.
 - A face whose name table does not follow Office's four-faces rule (Apple's Helvetica
   Neue: "Condensed Black", "Medium") is found by its full name.
@@ -75,6 +78,16 @@ four fonts, two sizes, four multiples, top and centred.
 `PPTXWriter/TextFit.swift` uses all of this: each paragraph's percentage gives
 ProPresenter's distance between lines exactly, and the first line is moved into place
 with the insets.
+
+## Checking that PowerPoint takes a deck
+
+KNOWN (2026-10-19): a deck PowerPoint opens by AppleScript (`open`) is opened without
+its "found a problem with content … Repair" prompt, whatever is wrong with it. Opened as
+a double-click opens it (`open -a "Microsoft PowerPoint" deck.pptx`), the prompt comes,
+and can be seen through System Events (the window's static text) and cancelled. So only
+the second is a check that a deck is valid. `Core/Tests/TestSupport/OOXMLLint.swift`
+checks the values the standard bounds without PowerPoint; the tests run it on every
+deck they write.
 
 ## How the comparing was done
 

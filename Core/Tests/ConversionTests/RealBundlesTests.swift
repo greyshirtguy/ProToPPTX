@@ -14,6 +14,7 @@ import DeckPreview
 import Foundation
 import Testing
 import TestSupport
+import ZipKit
 
 @Suite struct RealBundlesTests {
     static func bundles() -> [URL] {
@@ -30,6 +31,12 @@ import TestSupport
         for (k, bundle) in all.enumerated() {
             let loaded = try Converter.load(bundle, options: ConversionOptions())
             let notes = try Converter.write(loaded, to: out.appendingPathComponent("\(k).pptx"), options: ConversionOptions())
+            // Every part valid as PowerPoint reads it, not only well-formed.
+            let zip = try ZipReader(url: out.appendingPathComponent("\(k).pptx"))
+            for entry in zip.entries where entry.path.hasSuffix(".xml") {
+                let problems = OOXMLLint.problems(in: String(decoding: try zip.contents(of: entry), as: UTF8.self))
+                #expect(problems.isEmpty, "bundle \(k) \(entry.path): \(problems.prefix(5))")
+            }
             let carried = loaded.deck.slides.filter { $0.background?.isCarriedOver == true }.count
             print("NUMBERS bundle \(k): \(loaded.deck.slides.count) slides, \(carried) with carried backgrounds, \(notes.count) notes")
             #expect(!loaded.deck.slides.isEmpty)

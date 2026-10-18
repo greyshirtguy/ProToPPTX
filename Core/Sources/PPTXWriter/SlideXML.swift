@@ -143,7 +143,7 @@ struct SlideXML {
         case nil: spPr += "<a:noFill/>"
         }
         if let line = s.line {
-            spPr += #"<a:ln w="\#(units.emu(line.width))"><a:solidFill>\#(color(line.color, opacity: s.opacity))</a:solidFill>\#(dash(line))</a:ln>"#
+            spPr += #"<a:ln w="\#(lineWidth(line.width))"><a:solidFill>\#(color(line.color, opacity: s.opacity))</a:solidFill>\#(dash(line))</a:ln>"#
         } else {
             spPr += "<a:ln><a:noFill/></a:ln>"
         }
@@ -212,14 +212,38 @@ struct SlideXML {
         }
         // PowerPoint's lines put where ProPresenter's are (TextFit says how).
         let fitted = TextFit(body, frame: frame)
+        // PowerPoint allows no left margin less than nought, and ProPresenter's text can
+        // reach left of its margin into the padding (RTF \\li-100, seen in the
+        // maintainer's files; written as is, PowerPoint offers to "repair" the deck). So
+        // the box's left inset moves left by as much as any line reaches, and every
+        // paragraph's margin and tab stops move right by the same: each line stays where
+        // it was.
+        let reach = body.paragraphs.map { min($0.leftIndent, $0.leftIndent + $0.firstLineIndent) }.min() ?? 0
+        let hang = max(0, -reach)
         let i = body.insets
-        var xml = #"<p:txBody><a:bodyPr wrap="\#(body.wraps ? "square" : "none")" lIns="\#(units.emu(i.left))" tIns="\#(units.emu(i.top + fitted.shift))" rIns="\#(units.emu(i.right))" bIns="\#(units.emu(i.bottom - fitted.shift))" rtlCol="0" anchor="\#(anchor)">\#(fit)</a:bodyPr><a:lstStyle/>"#
-        for (k, paragraph) in body.paragraphs.enumerated() { xml += self.paragraph(paragraph, spacing: fitted.spacing[k], opacity: opacity) }
+        var xml = #"<p:txBody><a:bodyPr wrap="\#(body.wraps ? "square" : "none")" lIns="\#(units.emu(i.left - hang))" tIns="\#(units.emu(i.top + fitted.shift))" rIns="\#(units.emu(i.right))" bIns="\#(units.emu(i.bottom - fitted.shift))" rtlCol="0" anchor="\#(anchor)">\#(fit)</a:bodyPr><a:lstStyle/>"#
+        for (k, paragraph) in body.paragraphs.enumerated() {
+            xml += self.paragraph(paragraph, spacing: fitted.spacing[k], hang: hang, numberFrom: numberingStart(body.paragraphs, k), opacity: opacity)
+        }
         if body.paragraphs.isEmpty { xml += #"<a:p><a:endParaRPr lang="\#(language)"/></a:p>"# }
         return xml + "</p:txBody>"
     }
 
-    private func paragraph(_ p: Paragraph, spacing: Double, opacity: Double) -> String {
+    /// Where a numbered paragraph's list starts: the number of the first in the run of
+    /// numbered paragraphs it is in. Every paragraph of a run is written with the same
+    /// start, which is how PowerPoint knows them for one list and numbers them on (and
+    /// numbers them again when one is added or taken away).
+    private func numberingStart(_ paragraphs: [Paragraph], _ k: Int) -> Int {
+        guard case .number(let scheme, let start)? = paragraphs[k].bullet else { return 1 }
+        var first = start, j = k - 1
+        while j >= 0, case .number(let s, let n)? = paragraphs[j].bullet, s == scheme, n == first - 1 {
+            first = n
+            j -= 1
+        }
+        return max(1, min(first, 32767))
+    }
+
+    private func paragraph(_ p: Paragraph, spacing: Double, hang: Double, numberFrom: Int, opacity: Double) -> String {
         var attributes = ""
         switch p.alignment {
         case .left: attributes += #" algn="l""#
@@ -227,21 +251,22 @@ struct SlideXML {
         case .right: attributes += #" algn="r""#
         case .justified: attributes += #" algn="just""#
         }
-        if p.leftIndent != 0 { attributes += #" marL="\#(units.emu(p.leftIndent))""# }
+        if p.leftIndent + hang > 0 { attributes += #" marL="\#(units.emu(p.leftIndent + hang))""# }
         if p.firstLineIndent != 0 { attributes += #" indent="\#(units.emu(p.firstLineIndent))""# }
         if p.rightIndent > 0 { attributes += #" marR="\#(units.emu(p.rightIndent))""# }
         if p.defaultTabInterval > 0 { attributes += #" defTabSz="\#(units.emu(p.defaultTabInterval))""# }
 
         var inner = #"<a:lnSpc><a:spcPct val="\#(Units.percent(spacing))"/></a:lnSpc>"#
-        if p.spaceBefore > 0 { inner += #"<a:spcBef><a:spcPts val="\#(units.centipoints(p.spaceBefore))"/></a:spcBef>"# }
-        if p.spaceAfter > 0 { inner += #"<a:spcAft><a:spcPts val="\#(units.centipoints(p.spaceAfter))"/></a:spcAft>"# }
+        // (PowerPoint takes 0 to 1584 points.)
+        if p.spaceBefore > 0 { inner += #"<a:spcBef><a:spcPts val="\#(min(units.centipoints(p.spaceBefore), 158_400))"/></a:spcBef>"# }
+        if p.spaceAfter > 0 { inner += #"<a:spcAft><a:spcPts val="\#(min(units.centipoints(p.spaceAfter), 158_400))"/></a:spcAft>"# }
         switch p.bullet {
         case .character(let c)?: inner += #"<a:buFontTx/><a:buChar char="\#(XML.escape(c))"/>"#
-        case .number(let scheme, let start)?: inner += #"<a:buFontTx/><a:buAutoNum type="\#(scheme)"\#(start != 1 ? #" startAt="\#(start)""# : "")/>"#
+        case .number(let scheme, _)?: inner += #"<a:buFontTx/><a:buAutoNum type="\#(scheme)"\#(numberFrom != 1 ? #" startAt="\#(numberFrom)""# : "")/>"#
         case nil: inner += "<a:buNone/>"
         }
         if !p.tabStops.isEmpty {
-            inner += "<a:tabLst>" + p.tabStops.map { #"<a:tab pos="\#(units.emu($0))" algn="l"/>"# }.joined() + "</a:tabLst>"
+            inner += "<a:tabLst>" + p.tabStops.map { #"<a:tab pos="\#(units.emu($0 + hang))" algn="l"/>"# }.joined() + "</a:tabLst>"
         }
 
         var xml = "<a:p><a:pPr\(attributes)>\(inner)</a:pPr>"
@@ -282,7 +307,7 @@ struct SlideXML {
 
         var inner = ""
         if let outline = s.outline {
-            inner += #"<a:ln w="\#(units.emu(outline.width))"><a:solidFill>\#(color(outline.color, opacity: opacity))</a:solidFill></a:ln>"#
+            inner += #"<a:ln w="\#(lineWidth(outline.width))"><a:solidFill>\#(color(outline.color, opacity: opacity))</a:solidFill></a:ln>"#
         }
         switch s.fill {
         case .solid(let c): inner += "<a:solidFill>\(color(c, opacity: opacity))</a:solidFill>"
@@ -299,7 +324,7 @@ struct SlideXML {
     // MARK: - Colours and effects
 
     private func color(_ c: Color, opacity: Double = 1) -> String {
-        let alpha = c.alpha * opacity
+        let alpha = min(max(c.alpha * opacity, 0), 1)
         if alpha >= 0.9995 { return #"<a:srgbClr val="\#(c.hex)"/>"# }
         return #"<a:srgbClr val="\#(c.hex)"><a:alpha val="\#(Units.percent(alpha))"/></a:srgbClr>"#
     }
@@ -317,9 +342,15 @@ struct SlideXML {
         return #"<a:gradFill flip="none" rotWithShape="1"><a:gsLst>\#(list)</a:gsLst>\#(path)</a:gradFill>"#
     }
 
+    /// A shadow. PowerPoint takes no distance or blur less than nought: a shadow cast a
+    /// negative distance one way is cast the same distance the other way.
     private func outerShadow(_ s: Shadow, opacity: Double) -> String {
-        #"<a:outerShdw blurRad="\#(units.emu(s.blurRadius))" dist="\#(units.emu(s.distance))" dir="\#(Units.angle(s.direction))" algn="ctr" rotWithShape="0">\#(color(s.color, opacity: opacity))</a:outerShdw>"#
+        let direction = s.distance < 0 ? s.direction + 180 : s.direction
+        return #"<a:outerShdw blurRad="\#(max(0, units.emu(s.blurRadius)))" dist="\#(abs(units.emu(s.distance)))" dir="\#(Units.angle(direction))" algn="ctr" rotWithShape="0">\#(color(s.color, opacity: opacity))</a:outerShdw>"#
     }
+
+    /// A line's width, within what PowerPoint takes (0 to 1584 points).
+    private func lineWidth(_ units: Double) -> Int { min(max(self.units.emu(units), 0), 20_116_800) }
 
     // MARK: - Pictures and video
 
