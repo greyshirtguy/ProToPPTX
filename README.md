@@ -20,7 +20,7 @@ Vision.
 
 ## Try it
 
-Download `ProToPPTX-mac-0.1.1.dmg` from
+Download `ProToPPTX-mac-0.1.2.dmg` from
 [the latest release](https://github.com/greyshirtguy/ProToPPTX/releases/latest), open it,
 and drag ProToPPTX to Applications. It is not signed with an Apple developer
 certificate, so the first time macOS will not open it at a double-click: open System
