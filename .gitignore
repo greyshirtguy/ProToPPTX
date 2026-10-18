@@ -1,0 +1,21 @@
+# What git is to leave alone in this repository.
+
+# The maintainer's own presentations, kept beside the code to test against. They are
+# real services: their words, pictures and names are not to be committed, pushed or
+# quoted anywhere (AGENTS.md, "The person's files").
+/Pro Bundles*/
+
+# What the Finder leaves behind
+.DS_Store
+
+# What Swift and Xcode throw off
+.build/
+.swiftpm/
+build/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# Built and packaged releases
+*.dmg
+*.zip
