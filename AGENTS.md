@@ -41,6 +41,10 @@ It is not ProPresenter and has nothing to do with Renewed Vision.
   log pasted somewhere. `.gitignore` keeps the folder out; keep it so.
 - Tests that use them (`Core/Tests/ConversionTests/RealBundlesTests.swift`) run only
   when asked (`PROTOPPTX_REAL_BUNDLES=1`) and print numbers, never words.
+- The one exception: `docs/images/screenshot.png`, the README's picture of the app,
+  shows one of those presentations. It was put in at the maintainer's asking
+  (2026-10-19), as his own picture; it is not a reason to put in anything else from
+  them.
 - Test data in the repository is made up.
 - Before deleting anything, look at what it is.
 

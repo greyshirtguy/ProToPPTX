@@ -1,8 +1,12 @@
+<p align="center"><img src="App/Icon/ProToPPTX-1024.png" width="160" alt="ProToPPTX's icon"></p>
+
 # ProToPPTX
 
 Turns ProPresenter presentations (`.pro` and `.probundle`) into PowerPoint files that
 look the same, slide for slide, with the words as text boxes that can be edited, not
 pictures of slides.
+
+![ProToPPTX's window: the presentations added, on the left; the chosen one's slides as they will be in PowerPoint, in the middle; the options, and what could not be carried over, on the right](docs/images/screenshot.png)
 
 - Each slide ProPresenter would show, in its order, with its text boxes, shapes and
   pictures where ProPresenter puts them, in the same fonts, sizes and colours.
