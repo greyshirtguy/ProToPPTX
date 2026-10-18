@@ -32,8 +32,8 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: ProToPPTX
-        CFBundleShortVersionString: "0.1"
-        CFBundleVersion: "1"
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSApplicationCategoryType: public.app-category.productivity
         NSHumanReadableCopyright: "One person's hobby. Not ProPresenter, and nothing to do with Renewed Vision."
         CFBundleDocumentTypes:
@@ -58,7 +58,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.greyshirtguy.ProToPPTX
         PRODUCT_NAME: ProToPPTX
-        MARKETING_VERSION: "0.1"
+        MARKETING_VERSION: "0.1.0"
         CURRENT_PROJECT_VERSION: "1"
         SWIFT_VERSION: "6.0"
         CODE_SIGN_IDENTITY: "-"

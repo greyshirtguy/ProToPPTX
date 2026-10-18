@@ -1,0 +1,58 @@
+ProToPPTX for the Mac
+An early build. It needs macOS 15 or later.
+
+
+WHAT IT IS
+
+It turns ProPresenter presentations (.pro and .probundle files) into
+PowerPoint files that look the same, slide for slide, with the words as text
+boxes you can edit, not pictures of slides. Media cues go over too, and the
+background a slide's media cue puts up is kept on the slides after it, as
+ProPresenter shows them (an option: on as it comes).
+
+It only reads your presentations. It never changes them, or anything in
+ProPresenter's folders.
+
+It is one person's hobby. Nobody supports it and nothing is promised. It is not
+ProPresenter and has nothing to do with Renewed Vision, who make ProPresenter,
+or with Microsoft, who make PowerPoint.
+
+
+HOW TO USE IT
+
+Drop presentations, or folders of them, on its window (or use Add). Each one's
+slides are shown as they will be in PowerPoint; the options are on the right,
+with anything that could not be carried over. Export saves the one chosen;
+Export All saves every one in the list into a folder you choose.
+
+A .probundle has its pictures and videos in it. A .pro on its own has not: the
+app looks for them where the presentation says they were, beside the file, and
+in ProPresenter's own media folders on this Mac, and says which it could not
+find.
+
+Fonts are named in the PowerPoint file as in ProPresenter: a font that is not
+installed on the Mac that shows the file is shown in another until it is.
+
+
+OPENING IT THE FIRST TIME
+
+This build is not signed with an Apple developer certificate, and Apple has
+not checked it. So macOS will not open it at a double-click. To open it:
+
+1. Drag ProToPPTX to Applications, and double-click it there.
+   macOS says it could not verify the app. Close that message.
+2. Open System Settings, go to Privacy & Security, and scroll down to
+   Security. It says ProToPPTX was blocked. Click Open Anyway, and say yes
+   when it asks again.
+
+After that it opens like any other app.
+
+Do this only for something whose maker you have reason to trust. What this
+app is made from can be read at
+https://github.com/greyshirtguy/ProToPPTX
+
+
+NOT IN IT YET
+
+- Sound cues, builds and transitions.
+- The command line, with the same options as the app.

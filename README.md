@@ -18,6 +18,17 @@ A Mac app, and (to come) a command line with the same options (`docs/OPTIONS.md`
 It is one person's hobby. It is not ProPresenter and has nothing to do with Renewed
 Vision.
 
+## Try it
+
+Download `ProToPPTX-mac-0.1.0.dmg` from
+[the latest release](https://github.com/greyshirtguy/ProToPPTX/releases/latest), open it,
+and drag ProToPPTX to Applications. It is not signed with an Apple developer
+certificate, so the first time macOS will not open it at a double-click: open System
+Settings, Privacy & Security, and click Open Anyway beside ProToPPTX (the read-me in the
+image says it step by step). For macOS 15 and later, on Apple's chips and Intel's.
+
+It only reads presentations; it never changes them.
+
 ## Building
 
 ```
@@ -27,4 +38,9 @@ xcodegen                          # makes ProToPPTX.xcodeproj from project.yml
 open ProToPPTX.xcodeproj          # the app
 ```
 
-For macOS 15 and later, built with Xcode 26.
+For macOS 15 and later, built with Xcode 26. `./make-dmg.sh` builds the app as a Release
+and makes the disk image a release carries (`build/ProToPPTX-mac-<version>.dmg`).
+
+## Licence
+
+MIT: see [LICENSE](LICENSE).

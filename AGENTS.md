@@ -59,13 +59,23 @@ It is not ProPresenter and has nothing to do with Renewed Vision.
 - Words the user reads say plainly what happened. They never promise help, and never
   call the app a product.
 
+## Giving a build out
+
+- **Nothing is published without the maintainer's word**: no tag, no release, no file
+  added to one or taken down. Building a disk image for them to try publishes nothing.
+- The version is `MARKETING_VERSION` in `project.yml`. `./make-dmg.sh` builds the
+  Release and the image, and checks both; a release is the tag `v` and the version
+  (`v0.1.0`) with that image as its file, and the README's "Try it" brought up to date
+  in the same push.
+
 ## Where things are
 
 | Path | What it is |
 | --- | --- |
 | `Core/` | The Swift package: everything but the app's `@main` (`Core/Package.swift` says what each library is) |
 | `App/` | The Mac app's start and Info.plist |
-| `project.yml` | XcodeGen's description of the Xcode project |
+| `project.yml` | XcodeGen's description of the Xcode project (and of the app's Info.plist, made from it) |
+| `make-dmg.sh`, `dmg/` | The disk image a release carries, and the read-me in it |
 | `proto/` | ProPresenter's file formats (a submodule: `git submodule update --init`); only `autogen-proto` is used, through `Core/generate-proto.sh` |
 | `docs/OPTIONS.md` | Every option, and its command-line flag |
 | `docs/NOTES.md` | What was found out about ProPresenter's files and layout, and PowerPoint's |

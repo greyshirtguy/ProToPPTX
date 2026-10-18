@@ -267,7 +267,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.greyshirtguy.ProToPPTX;
 				PRODUCT_NAME = ProToPPTX;
 				SDKROOT = macosx;
@@ -289,7 +289,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.greyshirtguy.ProToPPTX;
 				PRODUCT_NAME = ProToPPTX;
 				SDKROOT = macosx;
