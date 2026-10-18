@@ -51,7 +51,7 @@ public final class SlideRenderer: @unchecked Sendable {
             case .shape(let shape): draw(shape, context: context, pixelScale: scale)
             case .picture(let picture): draw(picture, context: context)
             case .video(let video):
-                drawMedia(video.media.stillPicture ?? video.media, in: video.frame, mode: .fit, crop: .zero, context: context)
+                drawMedia(video.media.stillPicture ?? video.media, in: video.frame, mode: video.scale, crop: .zero, context: context)
             }
         }
         return context.makeImage()

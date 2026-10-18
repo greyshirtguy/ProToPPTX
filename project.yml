@@ -1,0 +1,67 @@
+# The Xcode project of the Mac app, for XcodeGen: `xcodegen` in this folder makes
+# ProToPPTX.xcodeproj from it. The project is kept in the repository too, so that it
+# opens without XcodeGen; after changing this, run xcodegen again and commit both.
+#
+# The app is one small target on top of the package in Core/, which has everything
+# else (Core/Package.swift says what).
+name: ProToPPTX
+options:
+  bundleIdPrefix: com.greyshirtguy
+  deploymentTarget:
+    macOS: "15.0"
+  createIntermediateGroups: true
+packages:
+  Core:
+    path: Core
+targets:
+  ProToPPTX:
+    type: application
+    platform: macOS
+    sources:
+      - App
+    dependencies:
+      - package: Core
+        product: AppViews
+    # App/Info.plist is made from these by xcodegen: edit here, not there.
+    #
+    # The file types are ProPresenter's own names for a presentation and a bundle, as
+    # ProPresenter 21.4 declares them. They are declared again here, as imported types,
+    # so that the app knows them on a Mac without ProPresenter. The app opens both as a
+    # viewer and as an alternate: ProPresenter stays what opens them at a double click.
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: ProToPPTX
+        CFBundleShortVersionString: "0.1"
+        CFBundleVersion: "1"
+        LSApplicationCategoryType: public.app-category.productivity
+        NSHumanReadableCopyright: "One person's hobby. Not ProPresenter, and nothing to do with Renewed Vision."
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: ProPresenter Presentation
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes:
+              - com.renewedvision.pro.presentation
+              - com.renewedvision.pro.presentation.bundle
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: com.renewedvision.pro.presentation
+            UTTypeDescription: ProPresenter Presentation
+            UTTypeConformsTo: [public.presentation, public.data]
+            UTTypeTagSpecification:
+              public.filename-extension: [pro]
+          - UTTypeIdentifier: com.renewedvision.pro.presentation.bundle
+            UTTypeDescription: ProPresenter Presentation Bundle
+            UTTypeConformsTo: [public.data]
+            UTTypeTagSpecification:
+              public.filename-extension: [proBundle, probundle]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.greyshirtguy.ProToPPTX
+        PRODUCT_NAME: ProToPPTX
+        MARKETING_VERSION: "0.1"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "6.0"
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+        ENABLE_HARDENED_RUNTIME: NO
+        COMBINE_HIDPI_IMAGES: YES

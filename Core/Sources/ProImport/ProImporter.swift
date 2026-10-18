@@ -27,6 +27,12 @@ public struct ImportResult: Sendable {
     public var notes: [ConversionNote]
     /// The arrangement whose order was followed, if one was.
     public var arrangement: String?
+
+    public init(deck: Deck, notes: [ConversionNote], arrangement: String?) {
+        self.deck = deck
+        self.notes = notes
+        self.arrangement = arrangement
+    }
 }
 
 public enum ProImporter {
@@ -113,8 +119,7 @@ public enum ProImporter {
                 collector.add(.simplified, "Slides turned off in ProPresenter are included", slide: number)
             }
 
-            let label = item.cue.name.isEmpty ? "Slide \(item.indexInGroup + 1)" : item.cue.name
-            slide.caption = item.groupName.isEmpty ? label : "\(item.groupName) · \(label)"
+            slide.caption = caption(item, slide)
             deck.slides.append(slide)
         }
 
@@ -125,6 +130,23 @@ public enum ProImporter {
     }
 
     // MARK: -
+
+    /// What the preview says under a slide: its group (when the group has a name worth
+    /// showing) and its first line of words, or the slide's own name when it has none.
+    /// (Slides ProPresenter made from a PowerPoint are named "Slide rId4 2 1", and
+    /// slides made from a picture by the picture's file name: the words say more.)
+    private static func caption(_ item: PlayedCue, _ slide: Slide) -> String {
+        var words = ""
+        for case .shape(let shape) in slide.items.reversed() {
+            if let text = shape.text?.plainText.split(whereSeparator: \.isNewline).first(where: { !$0.trimmingCharacters(in: .whitespaces).isEmpty }) {
+                words = text.trimmingCharacters(in: .whitespaces)
+                break
+            }
+        }
+        let label = !words.isEmpty ? words : (item.cue.name.isEmpty ? "Slide \(item.indexInGroup + 1)" : item.cue.name)
+        let group = item.groupName.trimmingCharacters(in: .whitespaces)
+        return group.isEmpty || group.lowercased() == "group" ? label : "\(group) · \(label)"
+    }
 
     static func presentationSlide(of cue: RVData_Cue) -> RVData_PresentationSlide? {
         for action in cue.actions where action.type == .presentationSlide {
@@ -154,7 +176,7 @@ public enum ProImporter {
 
     private static func video(_ cue: MediaCue, media: Media, frame: Rect) -> Video {
         let loops = cue.action.video.playbackBehavior == .loop || cue.media.video.transport.playbackBehavior == .loop
-        return Video(name: "Foreground media", frame: frame, media: media, loops: loops)
+        return Video(name: "Foreground media", frame: frame, media: media, scale: scale(of: cue.media), loops: loops)
     }
 
     private static func sections(_ played: [PlayedCue]) -> [Section] {

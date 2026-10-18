@@ -67,7 +67,7 @@ struct ElementMapper {
                 ))]
             case .video:
                 return [.video(Video(
-                    name: name, frame: frame, media: found,
+                    name: name, frame: frame, media: found, scale: Self.scaleMode(media.video.drawing.scaleBehavior),
                     loops: media.video.transport.playbackBehavior == .loop,
                     muted: media.video.audio.volume == 0 && media.video.hasAudio
                 ))]
@@ -139,8 +139,10 @@ struct ElementMapper {
             }
         }
 
-        if t.transform != .none {
-            notes.add(.simplified, "Text set to show one word or one line at a time is shown as written", slide: slide)
+        // Text transforms (one line, one word per line, …) change only text with more than
+        // one line in it; NOT KNOWN exactly how, so such text is shown as written, and said.
+        if t.transform != .none, doc.paragraphs.count > 1 {
+            notes.add(.simplified, "Text set in ProPresenter to be shown on one line, or a word at a time, is shown as written", slide: slide)
         }
 
         // KNOWN (measured against ProPresenter's exported slides, 2026-10-18): the words

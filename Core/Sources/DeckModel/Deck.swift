@@ -426,15 +426,18 @@ public struct Video: Sendable, Equatable {
     public var name: String
     public var frame: Rect
     public var media: Media
+    /// How it is fitted into its frame.
+    public var scale: ScaleMode
     public var loops: Bool
     /// Starts by itself when the slide comes up, as it would in ProPresenter.
     public var playsAutomatically: Bool
     public var muted: Bool
 
-    public init(name: String, frame: Rect, media: Media, loops: Bool = false, playsAutomatically: Bool = true, muted: Bool = false) {
+    public init(name: String, frame: Rect, media: Media, scale: ScaleMode = .fit, loops: Bool = false, playsAutomatically: Bool = true, muted: Bool = false) {
         self.name = name
         self.frame = frame
         self.media = media
+        self.scale = scale
         self.loops = loops
         self.playsAutomatically = playsAutomatically
         self.muted = muted

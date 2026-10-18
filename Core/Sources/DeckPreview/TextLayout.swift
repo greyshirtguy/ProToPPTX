@@ -165,6 +165,13 @@ public enum TextLayout {
         return traits.isEmpty ? fallback : NSFontManager.shared.convert(fallback, toHaveTrait: traits)
     }
 
+    /// The font with its small capitals turned on (lower case as small capitals).
+    static func smallCaps(_ font: NSFont) -> NSFont {
+        let features: [[NSFontDescriptor.FeatureKey: Int]] = [[.typeIdentifier: kLowerCaseType, .selectorIdentifier: kLowerCaseSmallCapsSelector]]
+        let descriptor = font.fontDescriptor.addingAttributes([.featureSettings: features])
+        return NSFont(descriptor: descriptor, size: font.pointSize) ?? font
+    }
+
     static func nsColor(_ c: DeckModel.Color) -> NSColor {
         NSColor(srgbRed: c.red, green: c.green, blue: c.blue, alpha: c.alpha)
     }
@@ -181,7 +188,7 @@ public enum TextLayout {
             rise += style.superscript > 0 ? 0.38 * size : -0.12 * size
             size *= 0.6
         }
-        a[.font] = font(style, size: size)
+        a[.font] = style.capitalization == .smallCaps ? smallCaps(font(style, size: size)) : font(style, size: size)
         a[.foregroundColor] = nsColor(averageColor(style.fill))
         a[.paragraphStyle] = paragraph
         if style.characterSpacing != 0 { a[.kern] = style.characterSpacing * scale }

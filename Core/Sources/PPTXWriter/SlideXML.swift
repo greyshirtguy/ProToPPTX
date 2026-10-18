@@ -77,7 +77,7 @@ struct SlideXML {
                 }
             case .video:
                 if options.videos != .leaveOut {
-                    tree += try video(Video(name: "Background video", frame: whole, media: bg.media, loops: true))
+                    tree += try video(Video(name: "Background video", frame: whole, media: bg.media, scale: bg.scale, loops: true))
                 }
             case .audio:
                 break
@@ -360,13 +360,28 @@ struct SlideXML {
 
     private mutating func video(_ v: Video) throws -> String {
         guard !v.media.isMissing else { return "" }
+        // Fitted as a picture is: placed whole, or filling the frame with what spills
+        // over cut off (PowerPoint crops a video as it does a picture).
         var frame = v.frame
-        if let size = v.media.naturalSize { frame = v.frame.placing(size, .fit) }
+        var crop = ""
+        if let size = v.media.naturalSize, size.width > 0, size.height > 0 {
+            switch v.scale {
+            case .fit: frame = v.frame.placing(size, .fit)
+            case .fill:
+                let shown = v.frame.placing(size, .fill)
+                let cutX = (shown.width - v.frame.width) / shown.width / 2
+                let cutY = (shown.height - v.frame.height) / shown.height / 2
+                if cutX > 0.0005 || cutY > 0.0005 {
+                    crop = #"<a:srcRect l="\#(Units.percent(cutX))" t="\#(Units.percent(cutY))" r="\#(Units.percent(cutX))" b="\#(Units.percent(cutY))"/>"#
+                }
+            case .stretch: break
+            }
+        }
 
         // Only a still, by choice or for want of the video's length.
         if options.videos == .stillOnly {
             guard let still = v.media.stillPicture else { return "" }
-            return try picture(Picture(name: v.name, frame: frame, media: still, scale: .stretch))
+            return try picture(Picture(name: v.name, frame: v.frame, media: still, scale: v.scale))
         }
         guard let still = v.media.stillPicture, let posterPart = try? media.part(for: still), let videoPart = try? media.part(for: v.media) else {
             notes.add(.missingMedia, "The video \(v.media.fileName) could not be read", slide: slideNumber)
@@ -380,7 +395,7 @@ struct SlideXML {
         return #"<p:pic><p:nvPicPr><p:cNvPr id="\#(id)" name="\#(XML.escape(v.name))" descr="\#(XML.escape(v.media.fileName))"><a:hlinkClick r:id="" action="ppaction://media"/></p:cNvPr>"#
             + #"<p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr><a:videoFile r:link="\#(linkID)"/>"#
             + #"<p:extLst><p:ext uri="{DAA4B4D4-6D71-4841-9C94-3DE7FCFB9230}"><p14:media xmlns:p14="\#(XML.p14)" r:embed="\#(mediaID)"/></p:ext></p:extLst></p:nvPr></p:nvPicPr>"#
-            + #"<p:blipFill><a:blip r:embed="\#(posterID)"/><a:stretch><a:fillRect/></a:stretch></p:blipFill>"#
+            + #"<p:blipFill><a:blip r:embed="\#(posterID)"/>\#(crop)<a:stretch><a:fillRect/></a:stretch></p:blipFill>"#
             + "<p:spPr>\(xfrm(frame, rotation: 0, flipH: false, flipV: false))<a:prstGeom prst=\"rect\"><a:avLst/></a:prstGeom></p:spPr></p:pic>"
     }
 

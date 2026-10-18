@@ -75,7 +75,7 @@ let package = Package(
         .target(name: "PPTXWriter", dependencies: ["ZipKit", "DeckModel", "DeckPreview"]),
         .target(name: "DeckPreview", dependencies: ["DeckModel"]),
         .target(name: "Conversion", dependencies: ["ProImport", "PPTXWriter", "DeckModel", "DeckPreview"]),
-        .target(name: "AppViews", dependencies: ["Conversion", "DeckModel", "DeckPreview"]),
+        .target(name: "AppViews", dependencies: ["Conversion", "ProImport", "DeckModel", "DeckPreview"]),
         .executableTarget(name: "protopptx", dependencies: ["Conversion"]),
 
         // Where the tests find what they test against. Not a test target itself.
@@ -89,6 +89,7 @@ let package = Package(
             ]
         ),
         .testTarget(name: "PPTXWriterTests", dependencies: ["PPTXWriter", "DeckModel", "ZipKit", "TestSupport"]),
+        .testTarget(name: "AppViewsTests", dependencies: ["AppViews", "Conversion", "DeckModel", "TestSupport"]),
         .testTarget(
             name: "ConversionTests",
             dependencies: ["Conversion", "ProImport", "ProFormat", "DeckModel", "DeckPreview", "ZipKit", "TestSupport"]

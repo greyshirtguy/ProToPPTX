@@ -42,6 +42,14 @@ public enum Converter {
         try write(load(input, options: options), to: output, options: options)
     }
 
+    /// Gives a deck made by hand (in a test) what `load` gives a read one: its videos'
+    /// stills and lengths.
+    public static func prepareForTest(_ loaded: ImportResult) throws -> ImportResult {
+        var result = loaded
+        result.deck = VideoStills.prepare(result.deck)
+        return result
+    }
+
     /// The name a converted presentation is given by default: its own, as a .pptx.
     public static func defaultOutputName(for input: URL) -> String {
         input.deletingPathExtension().lastPathComponent.trimmingCharacters(in: .whitespaces) + ".pptx"

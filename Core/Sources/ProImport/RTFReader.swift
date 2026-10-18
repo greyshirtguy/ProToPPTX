@@ -334,6 +334,13 @@ struct RTFReader {
         case "sub": ch.superscript = -1
         case "nosupersub": ch.superscript = 0
         case "caps": ch.caps = (n ?? 1) != 0 ? .allCaps : .none
+        // A font feature, as macOS writes one: its type times 65536 and its selector.
+        // KNOWN: ProPresenter's "small caps" is lower case type 37, selector 1. A bare
+        // \AppleTypeServices ends the features.
+        case "AppleTypeServicesF":
+            if let v = n, v >> 16 == 37 || v >> 16 == 38 { ch.caps = v & 0xFFFF == 1 ? .smallCaps : .none }
+        case "AppleTypeServices":
+            if ch.caps == .smallCaps { ch.caps = .none }
         case "scaps": ch.caps = (n ?? 1) != 0 ? .smallCaps : .none
         // Unicode
         case "uc": state.unicodeSkip = max(0, n ?? 1)

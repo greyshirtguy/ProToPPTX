@@ -114,3 +114,14 @@ extension RTFReaderTests {
         #expect(doc.paragraphs[1].alignment == .center)
     }
 }
+
+extension RTFReaderTests {
+    @Test func smallCapsFromAppleTypeServices() {
+        let rtf = Self.header + #"{\fonttbl\f0\fnil Helvetica;}"# + "\n"
+            + #"\f0\fs100 the \AppleTypeServices\AppleTypeServicesF2424833 Lord\AppleTypeServices  said}"#
+        let runs = RTFReader.read(rtf).paragraphs[0].runs
+        #expect(runs.map(\.text) == ["the ", "Lord", " said"])
+        #expect(runs[1].style.capitalization == .smallCaps)
+        #expect(runs[2].style.capitalization == RunStyle.Capitalization.none)
+    }
+}

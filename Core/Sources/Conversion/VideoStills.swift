@@ -19,7 +19,7 @@ import UniformTypeIdentifiers
 enum VideoStills {
     static func prepare(_ deck: Deck) -> Deck {
         var deck = deck
-        var made: [MediaSource: (still: MediaSource?, duration: Double?)] = [:]
+        var made: [MediaSource: (still: MediaSource?, duration: Double?, size: Size?)] = [:]
         let temporary = FileManager.default.temporaryDirectory.appendingPathComponent("ProToPPTX-\(UUID().uuidString)")
         defer { try? FileManager.default.removeItem(at: temporary) }
 
@@ -28,6 +28,8 @@ enum VideoStills {
             if made[media.source] == nil { made[media.source] = still(of: media, temporary: temporary) }
             media.still = made[media.source]?.still
             media.duration = made[media.source]?.duration
+            // The still has the video's shape, which is all that fitting it needs.
+            if media.naturalSize == nil { media.naturalSize = made[media.source]?.size }
         }
 
         for s in deck.slides.indices {
@@ -45,18 +47,18 @@ enum VideoStills {
         return deck
     }
 
-    private static func still(of media: Media, temporary: URL) -> (MediaSource?, Double?) {
+    private static func still(of media: Media, temporary: URL) -> (MediaSource?, Double?, Size?) {
         let url: URL
         switch media.source {
         case .file(let u):
             url = u
         case .zipEntry, .data:
-            guard let data = try? media.source.load() else { return (nil, nil) }
+            guard let data = try? media.source.load() else { return (nil, nil, nil) }
             try? FileManager.default.createDirectory(at: temporary, withIntermediateDirectories: true)
             url = temporary.appendingPathComponent("\(UUID().uuidString).\(media.fileExtension.isEmpty ? "mov" : media.fileExtension)")
-            guard (try? data.write(to: url)) != nil else { return (nil, nil) }
+            guard (try? data.write(to: url)) != nil else { return (nil, nil, nil) }
         case .missing:
-            return (nil, nil)
+            return (nil, nil, nil)
         }
 
         let work = StillWork(url: url)
@@ -69,12 +71,13 @@ enum VideoStills {
         let seconds = work.seconds
         let image = work.image
 
-        guard let image else { return (nil, seconds) }
+        guard let image else { return (nil, seconds, nil) }
+        let size = Size(width: Double(image.width), height: Double(image.height))
         let out = NSMutableData()
-        guard let dest = CGImageDestinationCreateWithData(out, UTType.png.identifier as CFString, 1, nil) else { return (nil, seconds) }
+        guard let dest = CGImageDestinationCreateWithData(out, UTType.png.identifier as CFString, 1, nil) else { return (nil, seconds, size) }
         CGImageDestinationAddImage(dest, image, nil)
-        guard CGImageDestinationFinalize(dest) else { return (nil, seconds) }
-        return (.data(out as Data, id: "still:\(media.fileName):\(media.source.hashValue)"), seconds)
+        guard CGImageDestinationFinalize(dest) else { return (nil, seconds, size) }
+        return (.data(out as Data, id: "still:\(media.fileName):\(media.source.hashValue)"), seconds, size)
     }
 }
 
