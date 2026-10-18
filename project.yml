@@ -18,7 +18,11 @@ targets:
     type: application
     platform: macOS
     sources:
-      - App
+      # App/ProToPPTX.icns goes in as the app's icon (CFBundleIconFile below). App/Icon
+      # is what made it (the maintainer's picture and the script), not part of the app.
+      - path: App
+        excludes:
+          - "Icon/**"
     dependencies:
       - package: Core
         product: AppViews
@@ -32,6 +36,7 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: ProToPPTX
+        CFBundleIconFile: ProToPPTX
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSApplicationCategoryType: public.app-category.productivity

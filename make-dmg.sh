@@ -12,7 +12,8 @@
 #      its own, without leave to be debugged (get-task-allow), and stripped of what a
 #      debugger goes by (which names the folders of the Mac it was built on).
 #   2. Looks at what it built: its version, both kinds of Mac, its signature, that it
-#      has no leave to be debugged, and that nothing in it names a folder of this Mac.
+#      has no leave to be debugged, that it has its icon, and that nothing in it names
+#      a folder of this Mac.
 #   3. Lays out a folder: the app, a way to Applications to drag it onto, and the
 #      read-me kept in dmg/.
 #   4. Makes a compressed image of it, mounts it, and holds the app in it against the
@@ -69,6 +70,14 @@ if codesign -d --entitlements - "$APP" 2>/dev/null | grep -q "get-task-allow"; t
     echo "the app was built with leave to be debugged (get-task-allow), which a build to give out must not have" >&2
     exit 1
 fi
+# Its icon: the file the app names as its own, in it, and the same to the byte as the
+# one kept in App/ (made by App/Icon/make-icon.sh). A build goes through without it, and
+# the app then wears the blank icon macOS gives a program that has none.
+ICON=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIconFile" "$PLIST" 2>/dev/null || true)
+[ -n "$ICON" ] || { echo "the app names no icon (CFBundleIconFile)" >&2; exit 1; }
+ICON="${ICON%.icns}.icns"
+[ -s "$HERE/App/$ICON" ] || { echo "there is no $HERE/App/$ICON, which the app names as its icon" >&2; exit 1; }
+cmp -s "$APP/Contents/Resources/$ICON" "$HERE/App/$ICON" || { echo "the app has not got its icon: $ICON is not in it, or is not the one in $HERE/App" >&2; exit 1; }
 SIGNED=$(codesign -dv "$APP" 2>&1 | sed -n 's/^Signature=//p; s/^Authority=//p' | head -1)
 [ -n "$SIGNED" ] || SIGNED="in a way this script does not know"
 for WHERE in "$HOME" "$HERE"; do

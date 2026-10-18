@@ -177,9 +177,8 @@ struct PresentationRow: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            Image(systemName: item.url.pathExtension.lowercased() == "probundle" ? "shippingbox" : "doc.richtext")
-                .foregroundStyle(.secondary)
-                .frame(width: 18)
+            PresentationIcon()
+                .frame(width: 15, height: 15)
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.name).lineLimit(1).truncationMode(.middle)
                 Group {

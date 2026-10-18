@@ -73,7 +73,8 @@ It is not ProPresenter and has nothing to do with Renewed Vision.
 | Path | What it is |
 | --- | --- |
 | `Core/` | The Swift package: everything but the app's `@main` (`Core/Package.swift` says what each library is) |
-| `App/` | The Mac app's start and Info.plist |
+| `App/` | The Mac app's start, Info.plist and icon (`ProToPPTX.icns`) |
+| `App/Icon/` | What made the icon: the maintainer's picture and `make-icon.sh`; not built into the app |
 | `project.yml` | XcodeGen's description of the Xcode project (and of the app's Info.plist, made from it) |
 | `make-dmg.sh`, `dmg/` | The disk image a release carries, and the read-me in it |
 | `proto/` | ProPresenter's file formats (a submodule: `git submodule update --init`); only `autogen-proto` is used, through `Core/generate-proto.sh` |

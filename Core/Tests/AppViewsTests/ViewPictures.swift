@@ -70,6 +70,9 @@ import TestSupport
         .padding(20)
         .background(Color(nsColor: .underPageBackgroundColor))
         save(cells, "slide-cells", width: 1140)
-        save(PresentationRow(item: item).padding(8), "row", width: 260)
+        save(VStack(alignment: .leading, spacing: 4) {
+            PresentationRow(item: item)
+            PresentationRow(item: item).environment(\.colorScheme, .dark).background(Color.black)
+        }.padding(8), "row", width: 260)
     }
 }

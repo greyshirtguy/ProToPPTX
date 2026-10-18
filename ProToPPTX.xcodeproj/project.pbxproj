@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		920E8041DC9FA3CEAF02A532 /* ProToPPTX.icns in Resources */ = {isa = PBXBuildFile; fileRef = D6C791F9627D9BEB0D1139B1 /* ProToPPTX.icns */; };
 		A1FDDAC3EF33E812CEB0EBDE /* AppViews in Frameworks */ = {isa = PBXBuildFile; productRef = 02857A1D67C9DB03C94709B3 /* AppViews */; };
 		C8521AF088620AE9CA1F7004 /* ProToPPTXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC41FDC573F7F9A6E6F976F0 /* ProToPPTXApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B30A6110388C109F0DE38711 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D6C791F9627D9BEB0D1139B1 /* ProToPPTX.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ProToPPTX.icns; sourceTree = "<group>"; };
 		E759741569A2FB4CD0D3B2B3 /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Core; path = Core; sourceTree = SOURCE_ROOT; };
 		EC2728501EE8920E0DD84643 /* ProToPPTX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProToPPTX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC41FDC573F7F9A6E6F976F0 /* ProToPPTXApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProToPPTXApp.swift; sourceTree = "<group>"; };
@@ -42,6 +44,7 @@
 			isa = PBXGroup;
 			children = (
 				B30A6110388C109F0DE38711 /* Info.plist */,
+				D6C791F9627D9BEB0D1139B1 /* ProToPPTX.icns */,
 				FC41FDC573F7F9A6E6F976F0 /* ProToPPTXApp.swift */,
 			);
 			path = App;
@@ -72,6 +75,7 @@
 			buildConfigurationList = D2D7952572AB0FF31CB5FF1D /* Build configuration list for PBXNativeTarget "ProToPPTX" */;
 			buildPhases = (
 				5E4916359605310B8BC0C283 /* Sources */,
+				5DDFA91D7C3494C82F17A308 /* Resources */,
 				373A30DD281A80BD0B1A95F8 /* Frameworks */,
 			);
 			buildRules = (
@@ -121,6 +125,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5DDFA91D7C3494C82F17A308 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				920E8041DC9FA3CEAF02A532 /* ProToPPTX.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5E4916359605310B8BC0C283 /* Sources */ = {
