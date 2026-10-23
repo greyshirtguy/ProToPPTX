@@ -1,0 +1,202 @@
+{
+ "root": {
+  "playlists": [
+   {
+    "parent": null,
+    "index": 0,
+    "meta": {
+     "Kind": {
+      "__tag": "group",
+      "group": {}
+     },
+     "name": "PLAYLIST",
+     "uuid": "00000000-0000-4000-8000-000000007000"
+    },
+    "id": "1@8",
+    "fractional_index": "80",
+    "children": [
+     {
+      "parent": "1@8",
+      "index": 0,
+      "meta": {
+       "Kind": {
+        "__tag": "group",
+        "group": {}
+       },
+       "name": "Made-Up Folder",
+       "uuid": "00000000-0000-4000-8000-000000007001"
+      },
+      "id": "7@8",
+      "fractional_index": "80",
+      "children": [
+       {
+        "parent": "7@8",
+        "index": 0,
+        "meta": {
+         "Kind": {
+          "__tag": "playlist",
+          "playlist": {
+           "LinkData": {
+            "__tag": null
+           }
+          }
+         },
+         "name": "Made-Up Sunday",
+         "uuid": "00000000-0000-4000-8000-000000007002"
+        },
+        "id": "13@8",
+        "fractional_index": "80",
+        "children": [
+         {
+          "parent": "13@8",
+          "index": 0,
+          "meta": {
+           "Kind": {
+            "__tag": "item",
+            "item": {
+             "is_hidden": false,
+             "ItemType": {
+              "__tag": "header",
+              "header": {
+               "actions": [],
+               "color": {
+                "green": 1,
+                "alpha": 1,
+                "blue": 1,
+                "red": 1
+               }
+              }
+             }
+            }
+           },
+           "name": "Before",
+           "uuid": "00000000-0000-4000-8000-000000007101"
+          },
+          "id": "21@8",
+          "fractional_index": "80",
+          "children": []
+         },
+         {
+          "parent": "13@8",
+          "index": 1,
+          "meta": {
+           "Kind": {
+            "__tag": "item",
+            "item": {
+             "is_hidden": false,
+             "ItemType": {
+              "__tag": "presentation",
+              "presentation": {
+               "document_path": {
+                "RelativeFilePath": {
+                 "local": {
+                  "root": 10,
+                  "path": "Libraries/Made Up/Made-Up Song.pro"
+                 },
+                 "__tag": "local"
+                },
+                "Storage": null,
+                "platform": 1
+               },
+               "content_destination": 0,
+               "arrangement_name": "Chorus first",
+               "arrangement": "00000000-0000-4000-8000-000000009100"
+              }
+             }
+            }
+           },
+           "name": "Made-Up Song",
+           "uuid": "00000000-0000-4000-8000-000000007102"
+          },
+          "id": "37@8",
+          "fractional_index": "8180",
+          "children": []
+         },
+         {
+          "parent": "13@8",
+          "index": 2,
+          "meta": {
+           "Kind": {
+            "__tag": "item",
+            "item": {
+             "is_hidden": false,
+             "ItemType": {
+              "__tag": "cue",
+              "cue": {
+               "uuid": "00000000-0000-4000-8000-000000007104",
+               "actions": []
+              }
+             }
+            }
+           },
+           "name": "A made-up video",
+           "uuid": "00000000-0000-4000-8000-000000007103"
+          },
+          "id": "58@8",
+          "fractional_index": "8280",
+          "children": []
+         },
+         {
+          "parent": "13@8",
+          "index": 3,
+          "meta": {
+           "Kind": {
+            "__tag": "item",
+            "item": {
+             "is_hidden": false,
+             "ItemType": {
+              "__tag": "presentation",
+              "presentation": {
+               "document_path": {
+                "RelativeFilePath": {
+                 "local": {
+                  "root": 10,
+                  "path": "Libraries/Made Up/Not There.pro"
+                 },
+                 "__tag": "local"
+                },
+                "Storage": null,
+                "platform": 1
+               },
+               "content_destination": 0,
+               "arrangement_name": "",
+               "arrangement": null
+              }
+             }
+            }
+           },
+           "name": "Not there",
+           "uuid": "00000000-0000-4000-8000-000000007105"
+          },
+          "id": "70@8",
+          "fractional_index": "8380",
+          "children": []
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "parent": "1@8",
+      "index": 1,
+      "meta": {
+       "Kind": {
+        "__tag": "playlist",
+        "playlist": {
+         "LinkData": {
+          "__tag": null
+         }
+        }
+       },
+       "name": "An Empty Playlist",
+       "uuid": "00000000-0000-4000-8000-000000007003"
+      },
+      "id": "91@8",
+      "fractional_index": "8180",
+      "children": []
+     }
+    ]
+   }
+  ]
+ }
+}

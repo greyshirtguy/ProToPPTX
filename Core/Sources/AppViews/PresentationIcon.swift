@@ -1,13 +1,17 @@
-// PresentationIcon: the small grey picture before each presentation's name in the list,
-// the one ProPresenter itself draws before a presentation in its own lists.
+// PresentationIcon: the small pictures before names in the lists: the grey one
+// ProPresenter itself draws before a presentation in its own lists, and the orange one
+// before a library.
 //
-// WHOSE IT IS. It is ProPresenter's own, not this app's, and is here at the maintainer's
-// asking (2026-10-19), as in Pro7ChordEditor, whose mac/Core/Sources/AppViews/
-// ListIcons.swift this is copied from: there it came from a file the maintainer
-// supplied ("PresentationItem", 2026-10-11). It is Renewed Vision's, and nothing in this
-// repository's licence makes it anyone else's. This app is not ProPresenter and has
-// nothing to do with Renewed Vision (AGENTS.md). If it is ever to be taken out, this is
-// the one file.
+// WHOSE THEY ARE. Both are ProPresenter's own, not this app's, and are here at the
+// maintainer's asking, as in Pro7ChordEditor, whose mac/Core/Sources/AppViews/
+// ListIcons.swift they are copied from: the outline (asked for here 2026-10-19) came
+// there from a file the maintainer supplied ("PresentationItem", 2026-10-11); the orange
+// square with that outline on it is ProPresenter's mark, its three colours read off a
+// picture of it (nothing of the picture itself is kept), and stands before a library
+// there as here (2026-10-23, with the libraries of ProPresenter's workspaces). They are
+// Renewed Vision's, and nothing in this repository's licence makes them anyone else's.
+// This app is not ProPresenter and has nothing to do with Renewed Vision (AGENTS.md).
+// If either is ever to be taken out, this is the one file.
 //
 // HOW IT IS DRAWN. From the outline's path, in code, and not from a picture file: a
 // list has one for every row, at whatever size the row's words are, on a screen of any
@@ -113,5 +117,31 @@ struct PresentationIcon: View {
             .fill(.secondary)
             .aspectRatio(1, contentMode: .fit)
             .accessibilityHidden(true)
+    }
+}
+
+/// What stands before a library's name: the outline in white on an orange square with
+/// rounded corners, lighter at its top left than at its bottom right.
+struct LibraryIcon: View {
+    /// The mark's three colours, from its top left corner, its middle and its bottom
+    /// right.
+    static let colours = [Color(red: 1, green: 0.79, blue: 0), Color(red: 1, green: 0.56, blue: 0), Color(red: 1, green: 0.25, blue: 0)]
+
+    var body: some View {
+        GeometryReader { given in
+            let side = min(given.size.width, given.size.height)
+            ZStack {
+                RoundedRectangle(cornerRadius: side * 0.23, style: .continuous)
+                    .fill(LinearGradient(colors: Self.colours, startPoint: .topLeading, endPoint: .bottomTrailing))
+                // (On the mark the outline is two thirds as wide as the square.)
+                PresentationGlyph()
+                    .fill(.white)
+                    .frame(width: side * 0.66, height: side * 0.66)
+            }
+            .frame(width: side, height: side)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .aspectRatio(1, contentMode: .fit)
+        .accessibilityHidden(true)
     }
 }

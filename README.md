@@ -16,6 +16,10 @@ pictures of slides.
   has no such thing, so by default each such slide is given the background that would
   be on screen.
 - Notes go to the speaker notes; groups become PowerPoint sections.
+- It finds ProPresenter's workspaces on the Mac, the folders of earlier versions and the
+  databases (cloud workspaces among them) of ProPresenter 22, and lists their libraries
+  and playlists: choose a presentation there, or a whole playlist, in its order and
+  with the arrangement each item chose. Files can be dropped on the window too.
 
 A Mac app, and (to come) a command line with the same options (`docs/OPTIONS.md`).
 
@@ -24,7 +28,7 @@ Vision.
 
 ## Try it
 
-Download `ProToPPTX-mac-0.1.2.dmg` from
+Download `ProToPPTX-mac-0.2.0.dmg` from
 [the latest release](https://github.com/greyshirtguy/ProToPPTX/releases/latest), open it,
 and drag ProToPPTX to Applications. It is not signed with an Apple developer
 certificate, so the first time macOS will not open it at a double-click: open System

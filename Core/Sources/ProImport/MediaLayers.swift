@@ -73,13 +73,13 @@ struct MediaLayers {
             case .media:
                 let mediaAction = action.media
                 let media = mediaAction.element
-                switch media.typeProperties {
-                case .audio:
+                switch ProSource.kind(of: media) {
+                case .audio?:
                     shown.audio.append(ProSource.fileName(of: media))
                     continue
-                case .image, .video:
+                case .image?, .video?:
                     break
-                default:
+                case nil:
                     // Live video and web pages: nothing to put on a slide.
                     continue
                 }

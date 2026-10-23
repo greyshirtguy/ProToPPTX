@@ -23,7 +23,7 @@ public enum Snapshot {
             // Wait for every presentation to be read and its slides drawn.
             for _ in 0..<120 {
                 try? await Task.sleep(for: .milliseconds(250))
-                let done = model.presentations.allSatisfy { item in
+                let done = model.added.allSatisfy { item in
                     if case .reading = item.state { return false }
                     return item.thumbnails.count == (item.deck?.slides.count ?? 0)
                 }

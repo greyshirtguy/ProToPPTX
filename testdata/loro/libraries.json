@@ -1,0 +1,76 @@
+{
+ "root": {
+  "rootLibrary": {
+   "url": {
+    "RelativeFilePath": {
+     "local": {
+      "root": 10,
+      "path": "Libraries"
+     },
+     "__tag": "local"
+    },
+    "Storage": null,
+    "platform": 1
+   },
+   "ChildType": {
+    "__tag": "libraryChildren",
+    "libraryChildren": {
+     "libraries": [
+      {
+       "url": {
+        "RelativeFilePath": {
+         "local": {
+          "root": 10,
+          "path": "Libraries/Made Up"
+         },
+         "__tag": "local"
+        },
+        "Storage": null,
+        "platform": 1
+       },
+       "ChildType": {
+        "libraryItems": {
+         "items": [
+          {
+           "url": {
+            "RelativeFilePath": {
+             "local": {
+              "root": 10,
+              "path": "Libraries/Made Up/Made-Up Song.pro"
+             },
+             "__tag": "local"
+            },
+            "Storage": null,
+            "platform": 1
+           }
+          }
+         ]
+        },
+        "__tag": "libraryItems"
+       }
+      },
+      {
+       "url": {
+        "RelativeFilePath": {
+         "local": {
+          "root": 10,
+          "path": "Libraries/Empty Library"
+         },
+         "__tag": "local"
+        },
+        "Storage": null,
+        "platform": 1
+       },
+       "ChildType": {
+        "libraryItems": {
+         "items": []
+        },
+        "__tag": "libraryItems"
+       }
+      }
+     ]
+    }
+   }
+  }
+ }
+}

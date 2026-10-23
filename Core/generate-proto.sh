@@ -13,9 +13,15 @@
 # protoc. The price is that this must be run again by hand when the submodule moves on,
 # which MadeFrom.swift is there to show: it says what the code beside it was made from.
 #
-# Only what a presentation needs is generated: presentation.proto and everything it
-# imports, worked out by protoc itself so that the list cannot go stale. (The same
+# Only what this app reads is generated: a presentation (presentation.proto), a folder
+# workspace's playlists (PlaylistDocument, in propresenter.proto), and everything they
+# import, worked out by protoc itself so that the list cannot go stale. (The same
 # approach as Pro7ChordEditor's mac/Core/generate-proto.sh, which this was copied from.)
+#
+# Beside the code, the same descriptions as data (Descriptions.swift): a workspace kept
+# in a database keeps each document as a tree whose parts are named as the messages'
+# fields are, and that tree is made into a message by going through the message's own
+# description (Workspaces/LoroMessage.swift), which the generated code does not keep.
 #
 # protoc will warn, once for nearly every file, that an import of customOptions.proto
 # is unused. It is, and it does no harm: the descriptions are taken out of ProPresenter
@@ -26,7 +32,7 @@
 # (Package.swift) must not be older than the protoc-gen-swift that made it.
 set -eu
 
-ROOTS="presentation.proto"
+ROOTS="presentation.proto propresenter.proto"
 
 HERE=$(cd "$(dirname "$0")" && pwd)
 PROTO="$HERE/../proto/autogen-proto"
@@ -54,8 +60,27 @@ trap 'rm -rf "$NEW"' EXIT
 # shellcheck disable=SC2086
 protoc -I "$PROTO" --swift_out="$NEW" --swift_opt=Visibility=Public $FILES
 
-rm -f "$OUT"/*.pb.swift
-cp "$NEW"/*.pb.swift "$OUT"/
+# The descriptions as data: every file above and Google's that they import, as one
+# FileDescriptorSet, kept as Base64 text so that it is plain Swift.
+# shellcheck disable=SC2086
+protoc -I "$PROTO" --include_imports --descriptor_set_out="$NEW/descriptions.pb" $FILES
+{
+    echo "// The descriptions of the messages the code beside this was made from, as a"
+    echo "// FileDescriptorSet in Base64. Written by generate-proto.sh: do not edit it, run that"
+    echo "// again."
+    echo
+    echo "/// What ProPresenter's messages are made of, field by field, for reading a message out of"
+    echo "/// something other than its own bytes."
+    echo "public enum Descriptions {"
+    echo "    /// The FileDescriptorSet, Base64."
+    printf '    public static let fileDescriptorSet = "'
+    base64 < "$NEW/descriptions.pb" | tr -d '\n'
+    echo '"'
+    echo "}"
+} > "$NEW/Descriptions.swift"
+
+rm -f "$OUT"/*.pb.swift "$OUT/Descriptions.swift"
+cp "$NEW"/*.pb.swift "$NEW/Descriptions.swift" "$OUT"/
 
 cat > "$OUT/MadeFrom.swift" <<EOF
 // What the code in this folder was made from. Written by generate-proto.sh, with the
@@ -69,7 +94,7 @@ public enum MadeFrom {
     public static let protoCommit = "$(git -C "$HERE/../proto" rev-parse --short HEAD)"
     /// The generator.
     public static let generator = "$(protoc-gen-swift --version), $(protoc --version)"
-    /// How many .proto files a presentation takes in.
+    /// How many .proto files the code was made from.
     public static let fileCount = $(echo "$FILES" | wc -l | tr -d ' ')
 }
 EOF

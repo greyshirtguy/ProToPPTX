@@ -36,17 +36,30 @@ public struct ImportResult: Sendable {
 }
 
 public enum ProImporter {
-    public static func read(_ url: URL, options: ConversionOptions) throws -> ImportResult {
-        let source = try ProSource(url: url)
+    /// A .pro or .probundle file. `workspaceFolder` is the workspace it is in, if it is
+    /// in one: media named "in the workspace" is looked for there first.
+    public static func read(_ url: URL, workspaceFolder: URL? = nil, arrangement: String? = nil, options: ConversionOptions) throws -> ImportResult {
+        try read(ProSource(url: url, workspaceFolder: workspaceFolder), arrangement: arrangement, options: options)
+    }
+
+    /// A presentation ProPresenter keeps other than as a file (in a database
+    /// workspace), already read. `name` is what to call it if it has no name.
+    public static func read(_ presentation: RVData_Presentation, name: String, workspaceFolder: URL?, arrangement: String? = nil, options: ConversionOptions) throws -> ImportResult {
+        try read(ProSource(presentation: presentation, name: name, workspaceFolder: workspaceFolder), arrangement: arrangement, options: options)
+    }
+
+    /// `arrangement`, an arrangement's id, is the one a playlist's item chose; it is
+    /// followed in place of the presentation's own, if the options say to follow one.
+    static func read(_ source: ProSource, arrangement chosen: String?, options: ConversionOptions) throws -> ImportResult {
         let presentation = source.presentation
         let collector = NoteCollector()
 
-        var (played, arrangement) = PlayOrder.cues(of: presentation, followArrangement: options.followArrangement)
+        var (played, arrangement) = PlayOrder.cues(of: presentation, followArrangement: options.followArrangement, chosen: chosen)
         if options.skipDisabledSlides { played = played.filter(\.cue.isEnabled) }
 
         let mapper = ElementMapper(source: source, notes: collector, familiesFromFile: familyNames(in: presentation))
         let size = slideSize(presentation, played)
-        var deck = Deck(size: size, title: presentation.name.isEmpty ? url.deletingPathExtension().lastPathComponent : presentation.name)
+        var deck = Deck(size: size, title: presentation.name.isEmpty ? source.name : presentation.name)
 
         var underColor = Color.black
         if presentation.background.isEnabled, case .color(let c)? = presentation.background.fill {

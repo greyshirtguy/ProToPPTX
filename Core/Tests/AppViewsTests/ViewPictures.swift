@@ -15,6 +15,7 @@ import Foundation
 import SwiftUI
 import Testing
 import TestSupport
+import Workspaces
 @testable import AppViews
 
 @MainActor @Suite struct ViewPictures {
@@ -30,6 +31,36 @@ import TestSupport
 
     @Test func emptyState() {
         save(DropHint(add: {}).frame(height: 500), "drop-hint", width: 800)
+    }
+
+    /// The rows of the left and the middle, with made-up names, light and dark.
+    @Test func workspaceRows() {
+        let cloud = Workspace(kind: .database, name: "Made-Up Church", folder: URL(fileURLWithPath: "/made/up"), isCloud: true, isInUse: true)
+        let folder = Workspace(kind: .folder, name: "Old Workspace", folder: URL(fileURLWithPath: "/made/up/old"))
+        let left = VStack(alignment: .leading, spacing: 8) {
+            WorkspaceLabel(workspace: cloud)
+            WorkspaceLabel(workspace: folder)
+            Text("Libraries").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+            LibraryRow(name: "Songs", count: 214)
+            LibraryRow(name: "Sermons", count: 38)
+            Text("Playlists").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+            FolderRow(name: "A Folder")
+            PlaylistRow(name: "Sunday Morning", count: 19)
+            Text("Files").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+            AddedRow(count: 3)
+        }
+        let middle = VStack(alignment: .leading, spacing: 6) {
+            PlaylistHeadingRow(name: "Before the service")
+            PlaylistHeadingRow(name: "")
+            OtherItemRow(name: "Countdown video", why: "Not a presentation")
+            OtherItemRow(name: "A song", why: "Not found in the workspace's libraries")
+        }
+        for scheme in [ColorScheme.light, .dark] {
+            save(HStack(alignment: .top, spacing: 30) { left.frame(width: 240); middle.frame(width: 260) }
+                .padding(14)
+                .background(Color(nsColor: .windowBackgroundColor))
+                .environment(\.colorScheme, scheme), "workspace-rows-\(scheme == .light ? "light" : "dark")", width: 580)
+        }
     }
 
     @Test func notes() {

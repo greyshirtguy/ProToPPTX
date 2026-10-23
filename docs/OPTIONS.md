@@ -17,14 +17,21 @@ the struct, the app's settings, and a flag here and in `protopptx`.
 
 ## The command line today
 
-`protopptx` exists so far for development, but already takes the flags above:
+`protopptx` is not complete yet, but already takes the flags above:
 
 ```
 protopptx convert <presentation.pro|.probundle> [-o <output.pptx>] [flags]
 protopptx preview <presentation.pro|.probundle> <folder> [flags]
+protopptx workspaces
+protopptx export <workspace> (--library <name> | --playlist <name>) [--presentation <name>] -o <folder> [flags]
 ```
 
-`preview` draws each slide as the app's preview does, into numbered PNGs.
+`preview` draws each slide as the app's preview does, into numbered PNGs. `workspaces`
+lists ProPresenter's workspaces on the Mac, each with its libraries and playlists, as
+the window's left column does. `export` writes a library's or a playlist's
+presentations into a folder, as the window's Export All does: a playlist's numbered in
+its order ("01 Name.pptx"), each with the arrangement its item chose; `--presentation`
+writes only the one of that name.
 
 ## For the command line still to come
 

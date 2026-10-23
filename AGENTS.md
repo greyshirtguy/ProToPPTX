@@ -7,7 +7,9 @@ Read this before doing anything here. It is short on purpose; `docs/` has the re
 ProToPPTX turns ProPresenter presentations (`.pro`, and `.probundle`, a zip of a
 presentation and its media) into PowerPoint files whose slides look the same as
 ProPresenter shows them, slide for slide, with the words as text that can be edited
-rather than as pictures of slides.
+rather than as pictures of slides. It also finds ProPresenter's own workspaces on the
+Mac, of both kinds (a folder of `.pro` files, and the newer database), and lists their
+libraries and playlists to convert from (`docs/WORKSPACES.md`).
 
 There are to be two front ends on one core: a Mac app (SwiftUI, `App/` and
 `Core/Sources/AppViews`), and a command line (`Core/Sources/protopptx`) with exactly the
@@ -20,7 +22,9 @@ It is not ProPresenter and has nothing to do with Renewed Vision.
 ## What must stay true
 
 1. **A presentation is only read.** Nothing here writes a `.pro` or a `.probundle`, or
-   anything inside ProPresenter's folders.
+   anything inside ProPresenter's folders. Its SQLite databases are copied, and the copy
+   read (`Workspaces/SQLiteReader.swift` says why: opening one, even to read, can write
+   beside it).
 2. **Slide for slide.** Each slide ProPresenter would show, in the order it shows them,
    becomes one PowerPoint slide; what is on it is where ProPresenter puts it, as near
    as PowerPoint allows. Where the two cannot agree, say so in the report the person
@@ -41,11 +45,16 @@ It is not ProPresenter and has nothing to do with Renewed Vision.
   log pasted somewhere. `.gitignore` keeps the folder out; keep it so.
 - Tests that use them (`Core/Tests/ConversionTests/RealBundlesTests.swift`) run only
   when asked (`PROTOPPTX_REAL_BUNDLES=1`) and print numbers, never words.
+- ProPresenter's own workspaces on the Mac (in `~/Library/Application Support/
+  RenewedVision/ProPresenter`) are the same: real services, read freely to check, never
+  quoted. Their tests (`Core/Tests/ConversionTests/RealWorkspacesTests.swift`) run only
+  when asked (`PROTOPPTX_REAL_WORKSPACES=1`) and print numbers.
 - The one exception: `docs/images/screenshot.png`, the README's picture of the app,
   shows one of those presentations. It was put in at the maintainer's asking
   (2026-10-19), as his own picture; it is not a reason to put in anything else from
   them.
-- Test data in the repository is made up.
+- Test data in the repository is made up (`testdata/`; `testdata/loro/make-fixtures.mjs`
+  says how its Loro documents were made).
 - Before deleting anything, look at what it is.
 
 ## How to work here
@@ -77,10 +86,14 @@ It is not ProPresenter and has nothing to do with Renewed Vision.
 | Path | What it is |
 | --- | --- |
 | `Core/` | The Swift package: everything but the app's `@main` (`Core/Package.swift` says what each library is) |
+| `Core/Sources/LoroKit` | Reading a Loro document's state, written from Loro's own description of its format |
+| `Core/Sources/Workspaces` | Finding ProPresenter's workspaces, and reading their libraries, playlists and presentations |
+| `testdata/` | Made-up test data: `loro/` has Loro documents, with the JSON Loro itself reads from each |
 | `App/` | The Mac app's start, Info.plist and icon (`ProToPPTX.icns`) |
 | `App/Icon/` | What made the icon: the maintainer's picture and `make-icon.sh`; not built into the app |
 | `project.yml` | XcodeGen's description of the Xcode project (and of the app's Info.plist, made from it) |
 | `make-dmg.sh`, `dmg/` | The disk image a release carries, and the read-me in it |
-| `proto/` | ProPresenter's file formats (a submodule: `git submodule update --init`); only `autogen-proto` is used, through `Core/generate-proto.sh` |
+| `proto/` | ProPresenter's file formats (a submodule: `git submodule update --init`); only `autogen-proto` is used, through `Core/generate-proto.sh`, which makes both the code and the descriptions as data |
 | `docs/OPTIONS.md` | Every option, and its command-line flag |
 | `docs/NOTES.md` | What was found out about ProPresenter's files and layout, and PowerPoint's |
+| `docs/WORKSPACES.md` | What was found out about ProPresenter's workspaces, of both kinds |

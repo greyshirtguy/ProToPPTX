@@ -9,6 +9,6 @@ public enum MadeFrom {
     public static let protoCommit = "1c019ab"
     /// The generator.
     public static let generator = "protoc-gen-swift 1.38.1, libprotoc 36.2"
-    /// How many .proto files a presentation takes in.
-    public static let fileCount = 32
+    /// How many .proto files the code was made from.
+    public static let fileCount = 35
 }

@@ -1,0 +1,664 @@
+{
+ "root": {
+  "SlideShow": {
+   "__tag": null
+  },
+  "uuid": "00000000-0000-4000-8000-000000009000",
+  "timeline": {
+   "loop": false,
+   "cues_v2": [],
+   "duration": 300
+  },
+  "background": {
+   "Fill": {
+    "__tag": null
+   },
+   "is_enabled": false
+  },
+  "ccli": {
+   "display": false,
+   "song_title": null,
+   "author": null
+  },
+  "selected_arrangement": null,
+  "name": "Made-Up Song",
+  "arrangements": [
+   {
+    "group_identifiers_v2": [
+     "00000000-0000-4000-8000-000000008002",
+     "00000000-0000-4000-8000-000000008001",
+     "00000000-0000-4000-8000-000000008002"
+    ],
+    "name": "Chorus first",
+    "uuid": "00000000-0000-4000-8000-000000009100"
+   }
+  ],
+  "notes": "",
+  "value_array_migration_version": "1",
+  "cues": {
+   "00000000-0000-4000-8000-000000000004": {
+    "name": "In no group",
+    "uuid": "00000000-0000-4000-8000-000000000004",
+    "completion_time": 0,
+    "completion_action_type": 0,
+    "actions": [
+     {
+      "name": "",
+      "label": null,
+      "type": 11,
+      "uuid": "00000000-0000-4000-8000-000000000104",
+      "delay_time": 0,
+      "ActionTypeData": {
+       "slide": {
+        "Slide": {
+         "__tag": "presentation",
+         "presentation": {
+          "template_guidelines": [],
+          "base_slide": {
+           "element_build_order_v2": [],
+           "draws_background_color": false,
+           "guidelines": [],
+           "uuid": "00000000-0000-4000-8000-000000000204",
+           "size": {
+            "height": 1080,
+            "width": 1920
+           },
+           "background_color": null,
+           "elements": [
+            {
+             "reveal_from_index": 0,
+             "element": {
+              "locked": false,
+              "uuid": "00000000-0000-4000-8000-000000000304",
+              "text": {
+               "rtf_data": "base64:e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcY29jb2FydGYyODIyCntcZm9udHRibFxmMFxmc3dpc3NcZmNoYXJzZXQwIEhlbHZldGljYTt9CntcY29sb3J0Ymw7XHJlZDI1NVxncmVlbjI1NVxibHVlMjU1O30Ke1wqXGV4cGFuZGVkY29sb3J0Ymw7O1xjc2dlbmVyaWNyZ2JcYzEwMDAwMFxjMTAwMDAwXGMxMDAwMDA7fQpccGFyZFxxY1xwYXJ0aWdodGVuZmFjdG9yMAoKXGYwXGZzMTYwIFxjZjIgTmV2ZXIgc2hvd259",
+               "transform": 0,
+               "margins": {
+                "bottom": 0,
+                "left": 0,
+                "top": 0,
+                "right": 0
+               },
+               "vertical_alignment": 1,
+               "attributes": {
+                "font": {
+                 "name": "Helvetica",
+                 "bold": false,
+                 "family": "Helvetica",
+                 "italic": false,
+                 "size": 80
+                },
+                "custom_attributes": []
+               },
+               "scale_behavior": 0,
+               "transformDelimiter": "",
+               "alternate_texts": []
+              },
+              "fill": {
+               "FillType": {
+                "__tag": "color",
+                "color": {
+                 "green": 1,
+                 "alpha": 1,
+                 "blue": 1,
+                 "red": 1
+                }
+               },
+               "enable": false
+              },
+              "bounds": {
+               "size": {
+                "height": 800,
+                "width": 1600
+               },
+               "origin": {
+                "y": 140,
+                "x": 160
+               }
+              },
+              "opacity": 1,
+              "Mask": {
+               "__tag": null
+              },
+              "stroke": {
+               "style": 0,
+               "width": 3,
+               "enable": false,
+               "color": {
+                "green": 1,
+                "alpha": 1,
+                "blue": 1,
+                "red": 1
+               }
+              },
+              "name": "Words",
+              "aspect_ratio_locked": false
+             },
+             "childBuilds": [],
+             "data_links": []
+            }
+           ]
+          },
+          "notes": null
+         }
+        }
+       },
+       "__tag": "slide"
+      },
+      "isEnabled": true
+     }
+    ],
+    "isEnabled": true,
+    "completion_target_type": 0
+   },
+   "00000000-0000-4000-8000-000000000002": {
+    "name": "Verse one, second",
+    "uuid": "00000000-0000-4000-8000-000000000002",
+    "completion_time": 0,
+    "completion_action_type": 0,
+    "actions": [
+     {
+      "name": "",
+      "label": null,
+      "type": 11,
+      "uuid": "00000000-0000-4000-8000-000000000102",
+      "delay_time": 0,
+      "ActionTypeData": {
+       "slide": {
+        "Slide": {
+         "__tag": "presentation",
+         "presentation": {
+          "template_guidelines": [],
+          "base_slide": {
+           "element_build_order_v2": [],
+           "draws_background_color": false,
+           "guidelines": [],
+           "uuid": "00000000-0000-4000-8000-000000000202",
+           "size": {
+            "height": 1080,
+            "width": 1920
+           },
+           "background_color": null,
+           "elements": [
+            {
+             "reveal_from_index": 0,
+             "element": {
+              "locked": false,
+              "uuid": "00000000-0000-4000-8000-000000000302",
+              "text": {
+               "rtf_data": "base64:e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcY29jb2FydGYyODIyCntcZm9udHRibFxmMFxmc3dpc3NcZmNoYXJzZXQwIEhlbHZldGljYTt9CntcY29sb3J0Ymw7XHJlZDI1NVxncmVlbjI1NVxibHVlMjU1O30Ke1wqXGV4cGFuZGVkY29sb3J0Ymw7O1xjc2dlbmVyaWNyZ2JcYzEwMDAwMFxjMTAwMDAwXGMxMDAwMDA7fQpccGFyZFxxY1xwYXJ0aWdodGVuZmFjdG9yMAoKXGYwXGZzMTYwIFxjZjIgTW9yZSBtYWRlLXVwIHdvcmRzfQ==",
+               "transform": 0,
+               "margins": {
+                "bottom": 0,
+                "left": 0,
+                "top": 0,
+                "right": 0
+               },
+               "vertical_alignment": 1,
+               "attributes": {
+                "font": {
+                 "name": "Helvetica",
+                 "bold": false,
+                 "family": "Helvetica",
+                 "italic": false,
+                 "size": 80
+                },
+                "custom_attributes": []
+               },
+               "scale_behavior": 0,
+               "transformDelimiter": "",
+               "alternate_texts": []
+              },
+              "fill": {
+               "FillType": {
+                "__tag": "color",
+                "color": {
+                 "green": 1,
+                 "alpha": 1,
+                 "blue": 1,
+                 "red": 1
+                }
+               },
+               "enable": false
+              },
+              "bounds": {
+               "size": {
+                "height": 800,
+                "width": 1600
+               },
+               "origin": {
+                "y": 140,
+                "x": 160
+               }
+              },
+              "opacity": 1,
+              "Mask": {
+               "__tag": null
+              },
+              "stroke": {
+               "style": 0,
+               "width": 3,
+               "enable": false,
+               "color": {
+                "green": 1,
+                "alpha": 1,
+                "blue": 1,
+                "red": 1
+               }
+              },
+              "name": "Words",
+              "aspect_ratio_locked": false
+             },
+             "childBuilds": [],
+             "data_links": []
+            }
+           ]
+          },
+          "notes": null
+         }
+        }
+       },
+       "__tag": "slide"
+      },
+      "isEnabled": true
+     }
+    ],
+    "isEnabled": true,
+    "completion_target_type": 0
+   },
+   "00000000-0000-4000-8000-000000000003": {
+    "name": "Chorus",
+    "uuid": "00000000-0000-4000-8000-000000000003",
+    "completion_time": 0,
+    "completion_action_type": 0,
+    "actions": [
+     {
+      "name": "",
+      "label": null,
+      "type": 11,
+      "uuid": "00000000-0000-4000-8000-000000000103",
+      "delay_time": 0,
+      "ActionTypeData": {
+       "slide": {
+        "Slide": {
+         "__tag": "presentation",
+         "presentation": {
+          "template_guidelines": [],
+          "base_slide": {
+           "element_build_order_v2": [],
+           "draws_background_color": false,
+           "guidelines": [],
+           "uuid": "00000000-0000-4000-8000-000000000203",
+           "size": {
+            "height": 1080,
+            "width": 1920
+           },
+           "background_color": null,
+           "elements": [
+            {
+             "reveal_from_index": 0,
+             "element": {
+              "locked": false,
+              "uuid": "00000000-0000-4000-8000-000000000303",
+              "text": {
+               "rtf_data": "base64:e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcY29jb2FydGYyODIyCntcZm9udHRibFxmMFxmc3dpc3NcZmNoYXJzZXQwIEhlbHZldGljYTt9CntcY29sb3J0Ymw7XHJlZDI1NVxncmVlbjI1NVxibHVlMjU1O30Ke1wqXGV4cGFuZGVkY29sb3J0Ymw7O1xjc2dlbmVyaWNyZ2JcYzEwMDAwMFxjMTAwMDAwXGMxMDAwMDA7fQpccGFyZFxxY1xwYXJ0aWdodGVuZmFjdG9yMAoKXGYwXGZzMTYwIFxjZjIgQSBtYWRlLXVwIGNob3J1c30=",
+               "transform": 0,
+               "margins": {
+                "bottom": 0,
+                "left": 0,
+                "top": 0,
+                "right": 0
+               },
+               "vertical_alignment": 1,
+               "attributes": {
+                "font": {
+                 "name": "Helvetica",
+                 "bold": false,
+                 "family": "Helvetica",
+                 "italic": false,
+                 "size": 80
+                },
+                "custom_attributes": []
+               },
+               "scale_behavior": 0,
+               "transformDelimiter": "",
+               "alternate_texts": []
+              },
+              "fill": {
+               "FillType": {
+                "__tag": "color",
+                "color": {
+                 "green": 1,
+                 "alpha": 1,
+                 "blue": 1,
+                 "red": 1
+                }
+               },
+               "enable": false
+              },
+              "bounds": {
+               "size": {
+                "height": 800,
+                "width": 1600
+               },
+               "origin": {
+                "y": 140,
+                "x": 160
+               }
+              },
+              "opacity": 1,
+              "Mask": {
+               "__tag": null
+              },
+              "stroke": {
+               "style": 0,
+               "width": 3,
+               "enable": false,
+               "color": {
+                "green": 1,
+                "alpha": 1,
+                "blue": 1,
+                "red": 1
+               }
+              },
+              "name": "Words",
+              "aspect_ratio_locked": false
+             },
+             "childBuilds": [],
+             "data_links": []
+            }
+           ]
+          },
+          "notes": null
+         }
+        }
+       },
+       "__tag": "slide"
+      },
+      "isEnabled": true
+     }
+    ],
+    "isEnabled": true,
+    "completion_target_type": 0
+   },
+   "00000000-0000-4000-8000-000000000001": {
+    "name": "Verse one, first",
+    "uuid": "00000000-0000-4000-8000-000000000001",
+    "completion_time": 0,
+    "completion_action_type": 0,
+    "actions": [
+     {
+      "name": "",
+      "label": null,
+      "type": 11,
+      "uuid": "00000000-0000-4000-8000-000000000101",
+      "delay_time": 0,
+      "ActionTypeData": {
+       "slide": {
+        "Slide": {
+         "__tag": "presentation",
+         "presentation": {
+          "template_guidelines": [],
+          "base_slide": {
+           "element_build_order_v2": [],
+           "draws_background_color": false,
+           "guidelines": [],
+           "uuid": "00000000-0000-4000-8000-000000000201",
+           "size": {
+            "height": 1080,
+            "width": 1920
+           },
+           "background_color": null,
+           "elements": [
+            {
+             "reveal_from_index": 0,
+             "element": {
+              "locked": false,
+              "uuid": "00000000-0000-4000-8000-000000000301",
+              "text": {
+               "rtf_data": "base64:e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcY29jb2FydGYyODIyCntcZm9udHRibFxmMFxmc3dpc3NcZmNoYXJzZXQwIEhlbHZldGljYTt9CntcY29sb3J0Ymw7XHJlZDI1NVxncmVlbjI1NVxibHVlMjU1O30Ke1wqXGV4cGFuZGVkY29sb3J0Ymw7O1xjc2dlbmVyaWNyZ2JcYzEwMDAwMFxjMTAwMDAwXGMxMDAwMDA7fQpccGFyZFxxY1xwYXJ0aWdodGVuZmFjdG9yMAoKXGYwXGZzMTYwIFxjZjIgTWFkZS11cCB3b3JkcywgdmVyc2Ugb25lfQ==",
+               "transform": 0,
+               "margins": {
+                "bottom": 0,
+                "left": 0,
+                "top": 0,
+                "right": 0
+               },
+               "vertical_alignment": 1,
+               "attributes": {
+                "font": {
+                 "name": "Helvetica",
+                 "bold": false,
+                 "family": "Helvetica",
+                 "italic": false,
+                 "size": 80
+                },
+                "custom_attributes": []
+               },
+               "scale_behavior": 0,
+               "transformDelimiter": "",
+               "alternate_texts": []
+              },
+              "fill": {
+               "FillType": {
+                "__tag": "color",
+                "color": {
+                 "green": 1,
+                 "alpha": 1,
+                 "blue": 1,
+                 "red": 1
+                }
+               },
+               "enable": false
+              },
+              "bounds": {
+               "size": {
+                "height": 800,
+                "width": 1600
+               },
+               "origin": {
+                "y": 140,
+                "x": 160
+               }
+              },
+              "opacity": 1,
+              "Mask": {
+               "__tag": null
+              },
+              "stroke": {
+               "style": 0,
+               "width": 3,
+               "enable": false,
+               "color": {
+                "green": 1,
+                "alpha": 1,
+                "blue": 1,
+                "red": 1
+               }
+              },
+              "name": "Words",
+              "aspect_ratio_locked": false
+             },
+             "childBuilds": [],
+             "data_links": []
+            }
+           ]
+          },
+          "notes": null
+         }
+        }
+       },
+       "__tag": "slide"
+      },
+      "isEnabled": true
+     },
+     {
+      "name": "",
+      "type": 2,
+      "uuid": "00000000-0000-4000-8000-000000000401",
+      "delay_time": 0,
+      "ActionTypeData": {
+       "__tag": "media",
+       "media": {
+        "element": {
+         "TypeProperties": {
+          "image": {
+           "source": {
+            "SourceType": {
+             "__tag": null
+            }
+           },
+           "file": {
+            "remote_properties": {
+             "procontent": {
+              "download_identifier": null
+             }
+            },
+            "local_url": {
+             "RelativeFilePath": {
+              "local": {
+               "root": 10,
+               "path": "Media/Assets/Made Up Background.png"
+              },
+              "__tag": "local"
+             },
+             "Storage": {
+              "__tag": "absolute_string",
+              "absolute_string": "file:///Users/someone/Made%20Up/Media/Assets/Made%20Up%20Background.png"
+             },
+             "platform": 1
+            }
+           },
+           "drawing": {
+            "scale_behavior": 1,
+            "effects": [],
+            "natural_size": {
+             "height": 1080,
+             "width": 1920
+            }
+           }
+          },
+          "__tag": "image"
+         },
+         "uuid": "00000000-0000-4000-8000-000000000501",
+         "identity_schema_version": "1",
+         "asset_id": "00000000-0000-4000-8000-000000000601",
+         "metadata": {
+          "format": "png"
+         }
+        },
+        "MediaType": {
+         "image": {},
+         "__tag": "image"
+        },
+        "markers": [],
+        "layer_type": 0
+       }
+      },
+      "isEnabled": true
+     }
+    ],
+    "isEnabled": true,
+    "completion_target_type": 0
+   }
+  },
+  "cue_group_placements": [
+   {
+    "parent": null,
+    "index": 0,
+    "meta": {
+     "Kind": {
+      "__tag": "group",
+      "group": {
+       "name": "Verse 1",
+       "application_group_identifier": null,
+       "hot_key": {
+        "code": 0
+       },
+       "color": {
+        "green": 0.5,
+        "alpha": 1,
+        "blue": 1,
+        "red": 0
+       }
+      }
+     },
+     "uuid": "00000000-0000-4000-8000-000000008001"
+    },
+    "id": "435@7",
+    "fractional_index": "80",
+    "children": [
+     {
+      "parent": "435@7",
+      "index": 0,
+      "meta": {
+       "Kind": {
+        "__tag": "cue",
+        "cue": {}
+       },
+       "uuid": "00000000-0000-4000-8000-000000000001"
+      },
+      "id": "449@7",
+      "fractional_index": "80",
+      "children": []
+     },
+     {
+      "parent": "435@7",
+      "index": 1,
+      "meta": {
+       "Kind": {
+        "__tag": "cue",
+        "cue": {}
+       },
+       "uuid": "00000000-0000-4000-8000-000000000002"
+      },
+      "id": "454@7",
+      "fractional_index": "8180",
+      "children": []
+     }
+    ]
+   },
+   {
+    "parent": null,
+    "index": 1,
+    "meta": {
+     "Kind": {
+      "__tag": "group",
+      "group": {
+       "name": "Chorus",
+       "application_group_identifier": null,
+       "hot_key": {
+        "code": 0
+       },
+       "color": {
+        "green": 0,
+        "alpha": 1,
+        "blue": 0,
+        "red": 1
+       }
+      }
+     },
+     "uuid": "00000000-0000-4000-8000-000000008002"
+    },
+    "id": "459@7",
+    "fractional_index": "8180",
+    "children": [
+     {
+      "parent": "459@7",
+      "index": 0,
+      "meta": {
+       "Kind": {
+        "__tag": "cue",
+        "cue": {}
+       },
+       "uuid": "00000000-0000-4000-8000-000000000003"
+      },
+      "id": "473@7",
+      "fractional_index": "80",
+      "children": []
+     }
+    ]
+   }
+  ]
+ }
+}

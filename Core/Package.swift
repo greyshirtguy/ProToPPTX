@@ -9,6 +9,9 @@
 //
 //   ZipKit       Reading and writing zip archives: a .probundle is one, and so is a
 //                .pptx. Plain Swift and Apple's Compression; no other dependency.
+//   LoroKit      Reading what a Loro document (loro.dev) holds, from a snapshot of it,
+//                written from Loro's own description of its format; no other
+//                dependency. ProPresenter's newer workspaces keep their documents so.
 //   ProFormat    The reader of a .pro file, generated from the descriptions of
 //                ProPresenter's format (generate-proto.sh). Nothing in it is written by
 //                hand except the file that says so.
@@ -18,7 +21,13 @@
 //   DeckPreview  A Deck's slide drawn into a picture, for the window's preview and for
 //                the tests to look at; and the measuring of text, with macOS's own text
 //                system, which ProImport needs too.
-//   ProImport    A .pro or .probundle read into a Deck: the slides in the order
+//   Workspaces   ProPresenter's workspaces on this Mac, both kinds (folders of .pro
+//                files, and databases of Loro documents), their libraries and
+//                playlists, and a presentation in one read as ProPresenter's message.
+//                It reads ProPresenter's databases with macOS's own SQLite, which is
+//                no new dependency.
+//   ProImport    A .pro, a .probundle, or a presentation from a workspace's
+//                database, read into a Deck: the slides in the order
 //                ProPresenter plays them, their text from its RTF, their media found,
 //                and what background is on screen at each slide.
 //   PPTXWriter   A Deck written out as a .pptx (Office Open XML). It measures text
@@ -44,7 +53,9 @@ let package = Package(
     platforms: [.macOS(.v15)],
     products: [
         .library(name: "ZipKit", targets: ["ZipKit"]),
+        .library(name: "LoroKit", targets: ["LoroKit"]),
         .library(name: "ProFormat", targets: ["ProFormat"]),
+        .library(name: "Workspaces", targets: ["Workspaces"]),
         .library(name: "DeckModel", targets: ["DeckModel"]),
         .library(name: "ProImport", targets: ["ProImport"]),
         .library(name: "PPTXWriter", targets: ["PPTXWriter"]),
@@ -60,9 +71,15 @@ let package = Package(
     ],
     targets: [
         .target(name: "ZipKit"),
+        .target(name: "LoroKit"),
         .target(
             name: "ProFormat",
             dependencies: [.product(name: "SwiftProtobuf", package: "swift-protobuf")]
+        ),
+        .target(
+            name: "Workspaces",
+            dependencies: ["LoroKit", "ProFormat", .product(name: "SwiftProtobuf", package: "swift-protobuf")],
+            linkerSettings: [.linkedLibrary("sqlite3")]
         ),
         .target(name: "DeckModel", dependencies: ["ZipKit"]),
         .target(
@@ -74,13 +91,21 @@ let package = Package(
         ),
         .target(name: "PPTXWriter", dependencies: ["ZipKit", "DeckModel", "DeckPreview"]),
         .target(name: "DeckPreview", dependencies: ["DeckModel"]),
-        .target(name: "Conversion", dependencies: ["ProImport", "PPTXWriter", "DeckModel", "DeckPreview"]),
-        .target(name: "AppViews", dependencies: ["Conversion", "ProImport", "DeckModel", "DeckPreview"]),
-        .executableTarget(name: "protopptx", dependencies: ["Conversion"]),
+        .target(name: "Conversion", dependencies: ["ProImport", "PPTXWriter", "DeckModel", "DeckPreview", "Workspaces"]),
+        .target(name: "AppViews", dependencies: ["Conversion", "ProImport", "DeckModel", "DeckPreview", "Workspaces"]),
+        .executableTarget(name: "protopptx", dependencies: ["Conversion", "Workspaces"]),
 
         // Where the tests find what they test against. Not a test target itself.
         .target(name: "TestSupport", path: "Tests/TestSupport"),
         .testTarget(name: "ZipKitTests", dependencies: ["ZipKit", "TestSupport"]),
+        .testTarget(name: "LoroKitTests", dependencies: ["LoroKit", "TestSupport"]),
+        .testTarget(
+            name: "WorkspacesTests",
+            dependencies: [
+                "Workspaces", "LoroKit", "ProFormat", "Conversion", "DeckModel", "TestSupport",
+                .product(name: "SwiftProtobuf", package: "swift-protobuf"),
+            ]
+        ),
         .testTarget(
             name: "ProImportTests",
             dependencies: [
@@ -89,10 +114,10 @@ let package = Package(
             ]
         ),
         .testTarget(name: "PPTXWriterTests", dependencies: ["PPTXWriter", "DeckModel", "ZipKit", "TestSupport"]),
-        .testTarget(name: "AppViewsTests", dependencies: ["AppViews", "Conversion", "DeckModel", "TestSupport"]),
+        .testTarget(name: "AppViewsTests", dependencies: ["AppViews", "Conversion", "DeckModel", "Workspaces", "TestSupport"]),
         .testTarget(
             name: "ConversionTests",
-            dependencies: ["Conversion", "ProImport", "ProFormat", "DeckModel", "DeckPreview", "ZipKit", "TestSupport"]
+            dependencies: ["Conversion", "ProImport", "ProFormat", "DeckModel", "DeckPreview", "ZipKit", "Workspaces", "TestSupport"]
         ),
     ]
 )

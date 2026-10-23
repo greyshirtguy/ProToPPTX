@@ -236,19 +236,12 @@ struct ElementMapper {
 
     /// The Deck's media for ProPresenter's, found on this Mac or noted as missing.
     func deckMedia(_ m: RVData_Media, slide: Int) -> Media {
-        let kind: Media.Kind
+        let kind = ProSource.kind(of: m) ?? .image
         var natural: Size?
         switch m.typeProperties {
-        case .video(let v)?:
-            kind = .video
-            natural = Self.size(v.drawing.naturalSize)
-        case .audio?:
-            kind = .audio
-        case .image(let i)?:
-            kind = .image
-            natural = Self.size(i.drawing.naturalSize)
-        default:
-            kind = .image
+        case .video(let v)?: natural = Self.size(v.drawing.naturalSize)
+        case .image(let i)?: natural = Self.size(i.drawing.naturalSize)
+        default: break
         }
         let found = source.locate(m)
         let name = ProSource.fileName(of: m)

@@ -28,6 +28,16 @@ where reasoned, NOT KNOWN where open.
   pixels).
 - A GUESS: a foreground media cue shows with its own slide only; the background comes
   back on the next. Fill and Input layers are taken as Background.
+- KNOWN (2026-10, one of the maintainer's presentations): a media item can have no type
+  properties at all (neither image nor video); ProPresenter 22, copying it into a
+  database workspace, made it a video. Such an item is taken as its file's ending says
+  (A GUESS that ProPresenter plays it so); until then this app left it out.
+- KNOWN (2026-10): media can be named only by the whole path it had on another Mac, with
+  no path "in the workspace" (4 files in the maintainer's workspaces). What follows
+  `Media/` in that path is tried under the workspace's folder, then the file's name in
+  its `Media`. In the maintainer's workspaces this found 83 more media cues (of 1,540).
+- The workspaces a presentation can be read from, of both kinds, are in
+  `docs/WORKSPACES.md`.
 - NOT KNOWN: what a macro does (its actions are in ProPresenter's settings, not the
   presentation). The maintainer's macros are all stream-look switches.
 
