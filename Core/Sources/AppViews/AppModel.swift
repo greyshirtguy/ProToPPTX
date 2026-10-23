@@ -127,8 +127,11 @@ public final class AppModel {
     }
 
     /// The presentations chosen, in the order they are listed.
-    public var selectedItems: [PresentationItem] {
-        rows.filter { selection.contains($0.id) }.compactMap(\.presentationItem)
+    public var selectedItems: [PresentationItem] { items(inRows: selection) }
+
+    /// The presentations of some rows, in the order they are listed.
+    public func items(inRows ids: Set<Row.ID>) -> [PresentationItem] {
+        rows.filter { ids.contains($0.id) }.compactMap(\.presentationItem)
     }
 
     /// Every presentation listed.

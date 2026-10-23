@@ -88,6 +88,7 @@ It is not ProPresenter and has nothing to do with Renewed Vision.
 | `Core/` | The Swift package: everything but the app's `@main` (`Core/Package.swift` says what each library is) |
 | `Core/Sources/LoroKit` | Reading a Loro document's state, written from Loro's own description of its format |
 | `Core/Sources/Workspaces` | Finding ProPresenter's workspaces, and reading their libraries, playlists and presentations |
+| `Core/Sources/AppViews/Resources` | ProPresenter's own icons for a folder and a playlist, as the maintainer supplied them (`PresentationIcon.swift` says whose they are) |
 | `testdata/` | Made-up test data: `loro/` has Loro documents, with the JSON Loro itself reads from each |
 | `App/` | The Mac app's start, Info.plist and icon (`ProToPPTX.icns`) |
 | `App/Icon/` | What made the icon: the maintainer's picture and `make-icon.sh`; not built into the app |

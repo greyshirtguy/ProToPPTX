@@ -1,22 +1,29 @@
 // PresentationIcon: the small pictures before names in the lists: the grey one
-// ProPresenter itself draws before a presentation in its own lists, and the orange one
-// before a library.
+// ProPresenter itself draws before a presentation in its own lists, the orange one
+// before a library, and the blue ones before a folder of playlists and a playlist.
 //
-// WHOSE THEY ARE. Both are ProPresenter's own, not this app's, and are here at the
+// WHOSE THEY ARE. All are ProPresenter's own, not this app's, and are here at the
 // maintainer's asking, as in Pro7ChordEditor, whose mac/Core/Sources/AppViews/
-// ListIcons.swift they are copied from: the outline (asked for here 2026-10-19) came
-// there from a file the maintainer supplied ("PresentationItem", 2026-10-11); the orange
-// square with that outline on it is ProPresenter's mark, its three colours read off a
-// picture of it (nothing of the picture itself is kept), and stands before a library
-// there as here (2026-10-23, with the libraries of ProPresenter's workspaces). They are
+// ListIcons.swift the first two are copied from: the outline (asked for here 2026-10-19)
+// came there from a file the maintainer supplied ("PresentationItem", 2026-10-11); the
+// orange square with that outline on it is ProPresenter's mark, its three colours read
+// off a picture of it (nothing of the picture itself is kept), and stands before a
+// library there as here (2026-10-23, with the libraries of ProPresenter's workspaces).
+// The blue two are ProPresenter's pictures themselves, as the maintainer supplied them
+// (2026-10-24), in Resources under their own names: "OutlineSourceFolderItem" and
+// "OutlineSourcePresentationItem", each drawn for 20 points and for twice that. They are
 // Renewed Vision's, and nothing in this repository's licence makes them anyone else's.
 // This app is not ProPresenter and has nothing to do with Renewed Vision (AGENTS.md).
-// If either is ever to be taken out, this is the one file.
+// If any is ever to be taken out, this is the one file (and Resources).
 //
-// HOW IT IS DRAWN. From the outline's path, in code, and not from a picture file: a
-// list has one for every row, at whatever size the row's words are, on a screen of any
-// sharpness, and a path is sharp at all of them.
+// HOW THEY ARE DRAWN. The first two from the outline's path, in code, and not from a
+// picture file: a list has one for every row, at whatever size the row's words are, on
+// a screen of any sharpness, and a path is sharp at all of them. The blue two are shown
+// at the one size they were drawn for, 20 points, where each is sharp; each is a square
+// of 16 with 2 to spare around it, so the orange one is put in 20 the same way
+// (`ListIconFrame`), and the names after them line up.
 
+import AppKit
 import SwiftUI
 
 /// The outline that stands for a presentation: a bar, and beside it a screen seen from
@@ -144,4 +151,45 @@ struct LibraryIcon: View {
         .aspectRatio(1, contentMode: .fit)
         .accessibilityHidden(true)
     }
+}
+
+/// One of ProPresenter's own pictures that stand before a name at the left of its
+/// window, shown at the size it was drawn for.
+struct ProPresenterListIcon: View {
+    enum Name: String {
+        case folder = "OutlineSourceFolderItem20x20"
+        case playlist = "OutlineSourcePresentationItem20x20"
+    }
+
+    let name: Name
+
+    /// (The bundle puts the picture and the one drawn for twice its size together, and
+    /// the screen chooses.)
+    @MainActor private static var loaded: [Name: NSImage] = [:]
+
+    var body: some View {
+        Group {
+            if let image = Self.image(name) {
+                Image(nsImage: image).resizable()
+            } else {
+                Color.clear
+            }
+        }
+        .frame(width: ListIconFrame.side, height: ListIconFrame.side)
+        .accessibilityHidden(true)
+    }
+
+    @MainActor static func image(_ name: Name) -> NSImage? {
+        if let image = loaded[name] { return image }
+        let image = Bundle.module.image(forResource: name.rawValue)
+        loaded[name] = image
+        return image
+    }
+}
+
+/// Where a list's small pictures go: a square of 20, as ProPresenter's are.
+enum ListIconFrame {
+    static let side: CGFloat = 20
+    /// How big the square of colour is in it (the rest is room around it).
+    static let mark: CGFloat = 16
 }

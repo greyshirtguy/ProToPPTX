@@ -14,6 +14,12 @@ import Workspaces
 struct SourceList: View {
     @Bindable var model: AppModel
 
+    /// Room put before every row's icon, so that a folder's chevron is not hard against
+    /// its icon, and every icon still lines up. (KNOWN, macOS 26.4: the chevron ended 5
+    /// points before the icon's square; the maintainer asked for about twice that,
+    /// 2026-10-24.)
+    static let roomAfterChevron: CGFloat = 5
+
     var body: some View {
         List(selection: $model.source) {
             if let id = model.chosenWorkspace {
@@ -36,11 +42,13 @@ struct SourceList: View {
                     Section("Libraries") {
                         Label(why, systemImage: "exclamationmark.triangle")
                             .foregroundStyle(.secondary).font(.callout).lineLimit(4)
+                            .padding(.leading, Self.roomAfterChevron)
                             .selectionDisabled()
                     }
                 default:
                     Section("Libraries") {
                         HStack { ProgressView().controlSize(.small); Text("Reading…").foregroundStyle(.secondary) }
+                            .padding(.leading, Self.roomAfterChevron)
                             .selectionDisabled()
                     }
                 }
@@ -127,11 +135,14 @@ struct LibraryRow: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            LibraryIcon().frame(width: 16, height: 16)
+            LibraryIcon()
+                .frame(width: ListIconFrame.mark, height: ListIconFrame.mark)
+                .frame(width: ListIconFrame.side, height: ListIconFrame.side)
             Text(name).lineLimit(1)
             Spacer(minLength: 4)
             Text("\(count)").foregroundStyle(.secondary).monospacedDigit().font(.callout)
         }
+        .padding(.leading, SourceList.roomAfterChevron)
     }
 }
 
@@ -141,11 +152,12 @@ struct PlaylistRow: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            Image(systemName: "list.bullet.rectangle").foregroundStyle(.secondary).frame(width: 16)
+            ProPresenterListIcon(name: .playlist)
             Text(name).lineLimit(1)
             Spacer(minLength: 4)
             Text("\(count)").foregroundStyle(.secondary).monospacedDigit().font(.callout)
         }
+        .padding(.leading, SourceList.roomAfterChevron)
     }
 }
 
@@ -154,10 +166,10 @@ struct FolderRow: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            Image(systemName: "folder").foregroundStyle(.secondary).frame(width: 16)
+            ProPresenterListIcon(name: .folder)
             Text(name).lineLimit(1)
         }
-
+        .padding(.leading, SourceList.roomAfterChevron)
     }
 }
 
@@ -166,11 +178,12 @@ struct AddedRow: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            Image(systemName: "tray.and.arrow.down").foregroundStyle(.secondary).frame(width: 16)
+            Image(systemName: "tray.and.arrow.down").foregroundStyle(.secondary).frame(width: ListIconFrame.side)
             Text("Added").lineLimit(1)
             Spacer(minLength: 4)
             if count > 0 { Text("\(count)").foregroundStyle(.secondary).monospacedDigit().font(.callout) }
         }
+        .padding(.leading, SourceList.roomAfterChevron)
         .help("Presentation files dropped on the window or added with Add…")
     }
 }
@@ -179,6 +192,8 @@ struct EmptyRow: View {
     let text: String
 
     var body: some View {
-        Text(text).foregroundStyle(.tertiary).selectionDisabled()
+        Text(text).foregroundStyle(.tertiary)
+            .padding(.leading, SourceList.roomAfterChevron)
+            .selectionDisabled()
     }
 }

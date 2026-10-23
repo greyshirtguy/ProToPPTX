@@ -63,6 +63,34 @@ import Workspaces
         }
     }
 
+    /// ProPresenter's own icons for a folder and a playlist are in the build, each with its
+    /// picture for twice the size.
+    @Test func listIcons() {
+        for name in [ProPresenterListIcon.Name.folder, .playlist] {
+            let image = ProPresenterListIcon.image(name)
+            #expect(image?.size == NSSize(width: 20, height: 20), "\(name)")
+            #expect(Set(image?.representations.map(\.pixelsWide) ?? []) == [20, 40], "\(name)")
+        }
+    }
+
+    /// The options' headings and a choice of cards, light and dark.
+    @Test func optionPieces() {
+        for scheme in [ColorScheme.light, .dark] {
+            save(VStack(alignment: .leading, spacing: 12) {
+                Heading("Background media", symbol: "photo.on.rectangle", colour: .blue)
+                Heading("Videos", symbol: "film", colour: .purple)
+                ChoiceCards("Video cues", selection: .constant(ConversionOptions.VideoHandling.stillOnly), choices: [
+                    .init(.embed, "Put the video in", symbol: "play.rectangle"),
+                    .init(.stillOnly, "A still from it only", symbol: "photo"),
+                    .init(.leaveOut, "Leave them out", symbol: "eye.slash"),
+                ])
+            }
+            .padding(14)
+            .background(Color(nsColor: .windowBackgroundColor))
+            .environment(\.colorScheme, scheme), "option-pieces-\(scheme == .light ? "light" : "dark")", width: 300)
+        }
+    }
+
     @Test func notes() {
         let notes = [
             ConversionNote(kind: .missingMedia, message: "The media file Background.png could not be found", slides: [1, 2, 3]),

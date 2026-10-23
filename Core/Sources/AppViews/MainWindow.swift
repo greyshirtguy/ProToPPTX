@@ -11,7 +11,8 @@
 //
 // Several presentations can be chosen at once. Export writes the chosen ones; Export
 // All writes every one listed in the middle, into one folder (a playlist's numbered in
-// its order).
+// its order). A presentation's menu (a right click) exports it, or every one chosen if
+// it is one of them, as the Finder's menus do.
 
 import AppKit
 import Conversion
@@ -58,20 +59,23 @@ public struct MainWindow: View {
             OptionsPanel(model: model)
                 .inspectorColumnWidth(min: 260, ideal: 300, max: 420)
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .primaryAction) {
+        .toolbar(id: "main") {
+            ToolbarItem(id: ToolbarTips.add, placement: .primaryAction) {
                 Button(action: chooseFiles) { Label("Add…", systemImage: "plus") }
-                    .help("Add ProPresenter presentation files (.pro or .probundle), or folders of them")
+            }
+            ToolbarItem(id: ToolbarTips.export, placement: .primaryAction) {
                 Button(action: exportSelected) { Label(exportTitle, systemImage: "square.and.arrow.up") }
                     .disabled(model.selectedItems.isEmpty || model.isExporting)
-                    .help("Save the chosen presentations as PowerPoint files")
+            }
+            ToolbarItem(id: ToolbarTips.exportAll, placement: .primaryAction) {
                 Button(action: exportAll) { Label("Export All…", systemImage: "square.and.arrow.up.on.square") }
                     .disabled(model.listedItems.isEmpty || model.isExporting)
-                    .help("Save every presentation listed as PowerPoint files, into one folder")
+            }
+            ToolbarItem(id: ToolbarTips.options, placement: .primaryAction) {
                 Toggle(isOn: $showOptions) { Label("Options", systemImage: "sidebar.right") }
-                    .help("Show or hide the options")
             }
         }
+        .background(ToolbarTips())
         .overlay {
             if isTargeted {
                 RoundedRectangle(cornerRadius: 12).stroke(Color.accentColor, lineWidth: 3).padding(6).allowsHitTesting(false)
@@ -109,9 +113,12 @@ public enum AppActions {
         if panel.runModal() == .OK { model.add(panel.urls) }
     }
 
-    /// One chosen: asks where, by name. Several: asks for a folder.
     public static func exportSelected(_ model: AppModel) {
-        let chosen = model.selectedItems
+        export(model.selectedItems, model)
+    }
+
+    /// One: asks where, by name. Several: asks for a folder.
+    public static func export(_ chosen: [PresentationItem], _ model: AppModel) {
         if chosen.count == 1, let item = chosen.first {
             let panel = NSSavePanel()
             panel.allowedContentTypes = [AppTypes.pptx]
@@ -186,6 +193,54 @@ enum AppTypes {
     static var presentations: [UTType] { [pro, probundle, .folder] }
 }
 
+/// The toolbar's tooltips. (KNOWN, macOS 26.4: SwiftUI's `.help` on a button in the
+/// toolbar reaches neither the screen nor accessibility; on a toggle it does. So each
+/// item is named, and its tooltip set on AppKit's own item of that name, which shows.
+/// Named, the toolbar is also one the person can rearrange, as the Finder's is.)
+struct ToolbarTips: NSViewRepresentable {
+    static let add = "add", export = "export", exportAll = "exportAll", options = "options"
+
+    static let tips: [String: String] = [
+        add: "Add ProPresenter presentation files (.pro or .probundle), or folders of them",
+        export: "Save the chosen presentations as PowerPoint files",
+        exportAll: "Save every presentation listed as PowerPoint files, into one folder",
+        options: "Show or hide the options",
+        // (SwiftUI's own button, by the name it gives it.)
+        "com.apple.SwiftUI.navigationSplitView.toggleSidebar": "Show or hide the libraries and playlists",
+    ]
+
+    func makeNSView(context: Context) -> NSView { Watcher() }
+    func updateNSView(_ view: NSView, context: Context) { (view as? Watcher)?.setTips() }
+
+    /// Sets the tips when it is put in its window, and on every item added after.
+    final class Watcher: NSView {
+        private var observer: NSObjectProtocol?
+
+        override func viewDidMoveToWindow() {
+            super.viewDidMoveToWindow()
+            if let observer { NotificationCenter.default.removeObserver(observer) }
+            observer = nil
+            guard window != nil else { return }
+            observer = NotificationCenter.default.addObserver(forName: NSToolbar.willAddItemNotification, object: nil, queue: .main) { [weak self] note in
+                guard let item = note.userInfo?["item"] as? NSToolbarItem else { return }
+                MainActor.assumeIsolated {
+                    if item.toolbar == nil || item.toolbar === self?.window?.toolbar { ToolbarTips.setTip(item) }
+                }
+            }
+            // (The toolbar's items can be made after this view is in the window.)
+            DispatchQueue.main.async { [weak self] in self?.setTips() }
+        }
+
+        func setTips() {
+            for item in window?.toolbar?.items ?? [] { ToolbarTips.setTip(item) }
+        }
+    }
+
+    @MainActor static func setTip(_ item: NSToolbarItem) {
+        if let tip = tips[item.itemIdentifier.rawValue], item.toolTip != tip { item.toolTip = tip }
+    }
+}
+
 // MARK: - The list in the middle
 
 struct PresentationList: View {
@@ -198,7 +253,6 @@ struct PresentationList: View {
                 case .presentation(let item, let id):
                     PresentationRow(item: item)
                         .tag(id)
-                        .contextMenu { menu(for: item, row: id) }
                 case .heading(_, let name):
                     PlaylistHeadingRow(name: name)
                         .selectionDisabled()
@@ -207,6 +261,9 @@ struct PresentationList: View {
                         .selectionDisabled()
                 }
             }
+        }
+        .contextMenu(forSelectionType: AppModel.Row.ID.self) { ids in
+            menu(for: ids)
         }
         .overlay {
             if model.rows.isEmpty {
@@ -237,13 +294,23 @@ struct PresentationList: View {
         return chosen > 1 ? "\(chosen) of \(all) chosen" : all
     }
 
-    @ViewBuilder private func menu(for item: PresentationItem, row: String) -> some View {
-        if let file = item.fileURL {
-            Button("Show in Finder") { NSWorkspace.shared.activateFileViewerSelecting([file]) }
-        }
-        if model.source == .added {
-            Divider()
-            Button("Remove from List") { model.removeAdded(model.selection.contains(row) ? model.selection : [row]) }
+    /// The menu of the rows clicked: the one, or every one chosen if it was one of them.
+    /// (A heading's is empty, and so not shown.)
+    @ViewBuilder private func menu(for ids: Set<AppModel.Row.ID>) -> some View {
+        let items = model.items(inRows: ids)
+        if !items.isEmpty {
+            Button(items.count > 1 ? "Export \(items.count) as PowerPoint…" : "Export as PowerPoint…") {
+                AppActions.export(items, model)
+            }
+            .disabled(model.isExporting)
+            let files = items.compactMap(\.fileURL)
+            if !files.isEmpty {
+                Button("Show in Finder") { NSWorkspace.shared.activateFileViewerSelecting(files) }
+            }
+            if model.source == .added {
+                Divider()
+                Button("Remove from List") { model.removeAdded(ids) }
+            }
         }
     }
 }

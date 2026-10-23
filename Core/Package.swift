@@ -92,7 +92,12 @@ let package = Package(
         .target(name: "PPTXWriter", dependencies: ["ZipKit", "DeckModel", "DeckPreview"]),
         .target(name: "DeckPreview", dependencies: ["DeckModel"]),
         .target(name: "Conversion", dependencies: ["ProImport", "PPTXWriter", "DeckModel", "DeckPreview", "Workspaces"]),
-        .target(name: "AppViews", dependencies: ["Conversion", "ProImport", "DeckModel", "DeckPreview", "Workspaces"]),
+        .target(
+            name: "AppViews",
+            dependencies: ["Conversion", "ProImport", "DeckModel", "DeckPreview", "Workspaces"],
+            // ProPresenter's own icons for a folder and a playlist (PresentationIcon.swift).
+            resources: [.process("Resources")]
+        ),
         .executableTarget(name: "protopptx", dependencies: ["Conversion", "Workspaces"]),
 
         // Where the tests find what they test against. Not a test target itself.
