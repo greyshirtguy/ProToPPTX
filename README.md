@@ -6,7 +6,7 @@ Turns ProPresenter presentations (`.pro` and `.probundle`) into PowerPoint files
 look the same, slide for slide, with the words as text boxes that can be edited, not
 pictures of slides.
 
-![ProToPPTX's window: the presentations added, on the left; the chosen one's slides as they will be in PowerPoint, in the middle; the options, and what could not be carried over, on the right](docs/images/screenshot.png)
+![ProToPPTX's window: a ProPresenter workspace's libraries and playlists on the left; the chosen playlist's presentations, in its order, beside them; the chosen one's slides as they will be in PowerPoint, in the middle; the options, and what could not be carried over, on the right](docs/images/screenshot.png)
 
 - Each slide ProPresenter would show, in its order, with its text boxes, shapes and
   pictures where ProPresenter puts them, in the same fonts, sizes and colours.

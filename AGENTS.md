@@ -50,9 +50,9 @@ It is not ProPresenter and has nothing to do with Renewed Vision.
   quoted. Their tests (`Core/Tests/ConversionTests/RealWorkspacesTests.swift`) run only
   when asked (`PROTOPPTX_REAL_WORKSPACES=1`) and print numbers.
 - The one exception: `docs/images/screenshot.png`, the README's picture of the app,
-  shows one of those presentations. It was put in at the maintainer's asking
-  (2026-10-19), as his own picture; it is not a reason to put in anything else from
-  them.
+  shows one of those presentations, in a playlist of his workspace. It was put in at
+  the maintainer's asking (2026-10-19, and replaced 2026-10-24), as his own picture; it
+  is not a reason to put in anything else from them.
 - Test data in the repository is made up (`testdata/`; `testdata/loro/make-fixtures.mjs`
   says how its Loro documents were made).
 - Before deleting anything, look at what it is.
